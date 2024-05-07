@@ -6,7 +6,5 @@ export async function POST({ cookies }) {
 		path: '/'
 	});
 
-	console.log(cookies.getAll());
-
 	throw redirect(302, '/');
 }

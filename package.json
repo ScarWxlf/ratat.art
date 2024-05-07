@@ -19,7 +19,9 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/bcrypt": "^5.0.2",
 		"@types/cookie": "^0.5.1",
+		"@types/jsonwebtoken": "^9.0.6",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
@@ -40,6 +42,9 @@
 	"type": "module",
 	"dependencies": {
 		"@egjs/svelte-infinitegrid": "^4.10.2",
+		"bcrypt": "^5.1.1",
+		"jsonwebtoken": "^9.0.2",
+		"pg": "^8.11.5",
 		"svelte-json-tree": "^2.2.0"
 	}
 }

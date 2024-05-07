@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
+import bcrypt from "bcrypt";
 
 /** @type {import('./$types').LayoutServerLoad} */
 export function load({ cookies }) {
@@ -10,17 +11,19 @@ export function load({ cookies }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	'sign-up': async ({ request, cookies }) => {
+	'sign-up': async ({ request, cookies, locals }) => {
 		const data = await request.formData();
+		const username = data.get('username');
 		const email = data.get('email');
 		const password = data.get('password');
 		const password2 = data.get('password2');
 		const captcha = data.get('g-recaptcha-response');
 
-		if ([email, password, password2].some((e) => !e)) {
+		if ([username, email, password, password2].some((e) => !e)) {
 			return fail(400, {
 				email,
 				missing: {
+					username: !username,
 					email: !email,
 					password: !password,
 					password2: !password2
@@ -33,6 +36,7 @@ export const actions = {
 			return fail(401, {
 				email,
 				missing: {
+					username: !username,
 					email: !email,
 					password: !password,
 					password2: !password2
@@ -41,7 +45,61 @@ export const actions = {
 			});
 		}
 
-		cookies.set('auth', 'true');
+		if(password !== password2){
+			return fail(401, {
+				email,
+				missing: {},
+				message: 'Passwords must be the same'
+			})
+		}
+
+		const saltRounds = 2;
+
+		bcrypt.hash(password, saltRounds, async (err: string, hash: string) => {
+			if (err) {
+			  console.error("Error hashing password:", err);
+			} else {
+				try {
+					console.log(hash);
+				  const result = await locals.dbconn.query("INSERT INTO users(username, email, password) VALUES($1, $2, $3)", [username, email, hash]);
+				  console.log(result)
+				} catch (error) {
+					console.log(error)
+				}
+			}
+		  });
+		
+
+		//   try {
+		// 	const result = await db.query("SELECT * FROM users WHERE email = $1 ", [
+		// 	  username,
+		// 	]);
+		// 	if (result.rows.length > 0) {
+		// 	  const user = result.rows[0];
+		// 	  const storedHashedPassword = user.password;
+		// 	  bcrypt.compare(password, storedHashedPassword, (err, valid) => {
+		// 		if (err) {
+		// 		  console.error("Error comparing passwords:", err);
+		// 		  return cb(err);
+		// 		} else {
+		// 		  if (valid) {
+		// 			return cb(null, user);
+		// 		  } else {
+		// 			return cb(null, false);
+		// 		  }
+		// 		}
+		// 	  });
+		// 	} else {
+		// 	  return cb("User not found");
+		// 	}
+		//   } catch (err) {
+		// 	console.log(err);
+		//   }
+
+
+
+
+
 
 		throw redirect(302, '/');
 	}
