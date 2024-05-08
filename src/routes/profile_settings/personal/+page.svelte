@@ -1,6 +1,7 @@
 <script>
     // import Input from '$lib/components/Input.svelte';
     export let data;
+	export let form;
 </script>
 
 <div class="flex flex-col">
@@ -9,24 +10,36 @@
 		<p class="text-1xl mt-2" style="width: 500px;">
 			Make changes to your personal information or account type.
 		</p>
-		<form class="flex flex-col">
-            <!-- <Input name='email' label='Email' value={data?.user?.email}/> -->
+		<form class="flex flex-col" method="POST" action="?/personal_profile_email">
 			<p class="text-2xl mt-3">Email</p>
 			<input
 				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
-				type="text"
+				type="email"
+				name="email"
                 value={data?.user?.email ? data.user.email : ''}
 			/>
+			{#if form?.message}
+				<p class="text-red-400">{form.message}</p>
+			{/if}
+			<button class="mt-4 py-2 px-4 rounded-full bg-gray-400 w-4/12" type="submit">Submit</button>
+		</form>
+		<form class="flex flex-col" method="POST" action="?/personal_profile">
+            <!-- <Input name='email' label='Email' value={data?.user?.email}/> -->
 			<p class="text-2xl mt-3">Old password</p>
 			<input
 				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
-				type="text"
+				type="password"
+				name="old_password"
 			/>
 			<p class="text-2xl mt-3">New password</p>
 			<input
 				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
-				type="text"
+				type="password"
+				name="new_password"
 			/>
+			{#if form?.messagePassword}
+				<p class="text-red-400">{form.messagePassword}</p>
+			{/if}
             <button class="mt-4 py-2 px-4 rounded-full bg-gray-400 w-4/12" type="submit">Submit</button>
 		</form>
 	</div>

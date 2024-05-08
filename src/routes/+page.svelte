@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 	import { MasonryInfiniteGrid } from '@egjs/svelte-infinitegrid';
 
 	let items = getItems(0, 10);
@@ -13,7 +13,8 @@
 			let h = Math.floor(Math.random() * 500) + 300;
 			var randomColor = Math.floor(Math.random() * 16777215).toString(16);
 			let text = nextKey;
-			let url = `https://dummyimage.com/${w}x${h}/${randomColor}/fff`;
+			// let url = `https://dummyimage.com/${w}x${h}/${randomColor}/fff`;
+			let url = `https://picsum.photos/${w}/${h}`;
 
 			nextItems.push({ groupKey: nextGroupKey, key: nextKey, url, title: text });
 		}
@@ -33,7 +34,7 @@
 	<meta name="description" content="ratat.art" />
 </svelte:head>
 
-<div class="w-full flex justify-center mt-6">
+<div class="w-full flex justify-center">
 	<div class="container">
 		<MasonryInfiniteGrid
 			class="w-full"

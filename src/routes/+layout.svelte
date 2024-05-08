@@ -15,7 +15,12 @@
 	}
 </script>
 
-<div class="dark:bg-slate-800">
+<svelte:head>
+	<title>ratat.art</title>
+	<meta name="description" content="ratat.art" />
+</svelte:head>
+
+<div class="dark:bg-slate-800 dark:text-white">
 	<Header>
 		<nav>
 			<ul class="flex flex-row justify-end items-center gap-4">
@@ -35,7 +40,7 @@
 				</li>
 				{#if data.auth}
 					<li>
-						<a href="/{data?.user?.username}">profile</a>
+						<a href="/user/{data?.username}">profile</a>
 					</li>
 					<li>
 						<form method="POST" action="/api/sign-out">
@@ -54,10 +59,8 @@
 		</nav>
 	</Header>
 
-	<main class="flex flex-col h-screen">
-		<div class="flex flex-row justify-center">а всё</div>
-
-		<div class="h-11" />
+	<main class="flex flex-col">
+		<div class="h-14" />
 		<slot />
 	</main>
 </div>

@@ -1,9 +1,40 @@
+import jwt from 'jsonwebtoken';
+import { env } from '$env/dynamic/private';
+import { fail, redirect } from '@sveltejs/kit';
+import { writeFile } from 'node:fs/promises';
+import { extname } from 'path';
 
-export const actions = {
-    public_profile: async ({ request, locals }) => {
-        const data = await request.formData();
-        const username = data.get('username');
-        console.log(locals.user)
-
-    }
+export function load({ locals }) {
+	return{user: locals.user}
 }
+
+/** @type {import('./$types').Actions} */
+export const actions = {
+	public_profile: async ({ request, cookies, locals }) => {
+		const data = await request.formData();
+		const username = data.get('username');
+		// const SECRET_KEY = env.JWT_SECRET_KEY;
+		const token = cookies.get('auth');
+		if (!token) {
+			return fail(401, {message: 'Unauthorized'});
+		}
+		try {
+			let {userId} = locals.user;
+            const result = await locals.dbconn.query("UPDATE users SET username = $1 WHERE id = $2 RETURNING username", [username, userId]);
+			locals.user.username = result.rows[0].username;
+		} catch (error) {
+			cookies.delete('auth', {
+				path: '/'
+			});
+            throw redirect(302, '/');
+		}
+	},
+	public_profile_picture: async ({ request, locals }) => {
+		const data = await request.formData();
+		const picture = data.get('picture');
+		const filename = `static/uploads/profilePictures/${locals.user.userId}${extname(picture?.name)}`;
+    	await writeFile(filename, Buffer.from(await picture?.arrayBuffer()));
+
+		return { success: true };
+	}
+};

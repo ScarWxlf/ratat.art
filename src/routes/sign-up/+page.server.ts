@@ -11,7 +11,7 @@ export function load({ cookies }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	'sign-up': async ({ request, cookies, locals }) => {
+	'sign-up': async ({ request, locals }) => {
 		const data = await request.formData();
 		const username = data.get('username');
 		const email = data.get('email');

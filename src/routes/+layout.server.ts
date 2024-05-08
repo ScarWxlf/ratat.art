@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
 
 /** @type {import('./$types').LayoutServerLoad} */
-export function load({ cookies }) {
+export function load({ cookies, locals }) {
 	const SECRET_KEY = env.JWT_SECRET_KEY;
 	const token = cookies.get('auth');
 	if(!token) {
@@ -14,7 +14,7 @@ export function load({ cookies }) {
 		const decoded = jwt.verify(token, SECRET_KEY);
 		return {
 			auth: true,
-			user: decoded
+			username: locals.user.username,
 		};
 	} catch (error) {
 		cookies.delete('auth', {
