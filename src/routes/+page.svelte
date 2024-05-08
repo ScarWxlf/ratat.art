@@ -3,7 +3,7 @@
 
 	let items = getItems(0, 10);
 
-	function getItems(nextGroupKey, count) {
+	function getItems(nextGroupKey: number, count: number) {
 		const nextItems = [];
 
 		for (let i = 0; i < count; ++i) {

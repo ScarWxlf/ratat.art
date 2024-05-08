@@ -17,7 +17,7 @@ export const actions = {
 		const email = data.get('email');
 		const password = data.get('password');
 		const captcha = data.get('g-recaptcha-response');
-        const SECRET_KEY = env.JWT_SECRET_KEY;
+		const SECRET_KEY = env.JWT_SECRET_KEY;
 
 		if ([email, password].some((e) => !e)) {
 			return fail(400, {
@@ -41,28 +41,29 @@ export const actions = {
 			});
 		}
 
-        let err, valid;
-        let user;
+		let err, valid;
+		let user;
 		try {
 			const result = await locals.dbconn.query('SELECT * FROM users WHERE email = $1 ', [email]);
 			if (result.rows.length > 0) {
 				user = result.rows[0];
 				const storedHashedPassword = user.password;
-                [err, valid] = await compareAsync(password, storedHashedPassword);
+				[err, valid] = await compareAsync(password, storedHashedPassword);
 			} else {
 				return fail(401, {
-                    message: "Invalid email or password",
-                });
+					message: 'Invalid email or password',
+					error: err,
+				});
 			}
 		} catch (err) {
 			console.log(err);
 		}
 
-        if(valid){
-            const token = jwt.sign({ userId: user.id}, SECRET_KEY, { expiresIn: '1h' });
-            cookies.set('auth', token, { httpOnly: true }); 
-            throw redirect(302, '/');
-        }
+		if (valid) {
+			const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '1h' });
+			cookies.set('auth', token, { httpOnly: true });
+			throw redirect(302, '/');
+		}
 	}
 };
 
@@ -80,11 +81,10 @@ async function submitCaptcha(captcha: string): Promise<boolean> {
 	return result.success;
 }
 
-async function compareAsync(pass, hashedPass) {
-    return new Promise (resolve => {
-    bcrypt.compare(pass, hashedPass, (err, valid) => {
-    resolve([err, valid]);
-  });
-  });
-    
-  }
+async function compareAsync(pass: string, hashedPass:string): Promise<[Error, boolean]> {
+	return new Promise((resolve) => {
+		bcrypt.compare(pass, hashedPass, (err, valid) => {
+			resolve([err!, valid]);
+		});
+	});
+}

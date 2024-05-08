@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-import { env } from '$env/dynamic/private';
 import { fail, redirect } from '@sveltejs/kit';
 import { writeFile } from 'node:fs/promises';
 import { extname } from 'path';
@@ -19,7 +17,7 @@ export const actions = {
 			return fail(401, {message: 'Unauthorized'});
 		}
 		try {
-			let {userId} = locals.user;
+			const {userId} = locals.user;
             const result = await locals.dbconn.query("UPDATE users SET username = $1 WHERE id = $2 RETURNING username", [username, userId]);
 			locals.user.username = result.rows[0].username;
 		} catch (error) {

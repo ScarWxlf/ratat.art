@@ -9,7 +9,8 @@ declare global {
 				username: string;
 				email: string;
 				password: string;
-			};
+			},
+			dbconn: PoolClient;
 		}
 		// interface PageData {}
 		// interface Platform {}

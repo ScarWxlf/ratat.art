@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
+import type { LayoutServerLoad } from './$types';
 
-/** @type {import('./$types').LayoutServerLoad} */
-export function load({ cookies, locals }) {
+export const load: LayoutServerLoad = async ({ cookies, locals }) => {
 	const SECRET_KEY = env.JWT_SECRET_KEY;
 	const token = cookies.get('auth');
 	if(!token) {
@@ -11,7 +11,7 @@ export function load({ cookies, locals }) {
 		};
 	}
 	try {
-		const decoded = jwt.verify(token, SECRET_KEY);
+		jwt.verify(token, SECRET_KEY);
 		return {
 			auth: true,
 			username: locals.user.username,

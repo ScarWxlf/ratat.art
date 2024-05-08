@@ -10,7 +10,7 @@ export function load({ locals }) {
 export const actions = {
     personal_profile: async ({ request, locals }) => {
         const data = await request.formData();
-		let { userId } = locals.user;
+		const { userId } = locals.user;
         let err, valid;
 		const old_password = data.get('old_password');
 		const new_password = data.get('new_password');

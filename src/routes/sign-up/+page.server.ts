@@ -1,21 +1,20 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import bcrypt from "bcrypt";
+import type {Actions, PageServerLoad} from './$types';
 
-/** @type {import('./$types').LayoutServerLoad} */
-export function load({ cookies }) {
+export const load: PageServerLoad = ({ cookies }) => {
 	if (cookies.get('auth')) {
 		throw redirect(302, '/');
 	}
 }
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
 	'sign-up': async ({ request, locals }) => {
 		const data = await request.formData();
 		const username = data.get('username');
 		const email = data.get('email');
-		const password = data.get('password');
+		const password = data.get('password') as string;
 		const password2 = data.get('password2');
 		const captcha = data.get('g-recaptcha-response');
 
@@ -55,7 +54,7 @@ export const actions = {
 
 		const saltRounds = 2;
 
-		bcrypt.hash(password, saltRounds, async (err: string, hash: string) => {
+		bcrypt.hash(password, saltRounds, async (err, hash) => {
 			if (err) {
 			  console.error("Error hashing password:", err);
 			} else {

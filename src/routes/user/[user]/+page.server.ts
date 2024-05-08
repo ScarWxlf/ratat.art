@@ -1,6 +1,7 @@
 import { error } from "@sveltejs/kit";
+import type { PageServerLoad } from './$types';
 
-export async function load({ locals, params }) {
+export const load: PageServerLoad = async ({ locals, params }) => {
     const checkUser = params.user;
     const result = await locals.dbconn.query("SELECT * FROM users WHERE username = $1", [checkUser]);
     if (!result.rows[0]) {
