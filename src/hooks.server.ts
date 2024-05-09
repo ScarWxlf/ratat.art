@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { connectToDB } from '$lib/db'; // Убедитесь, что путь к модулю db корректен
 import { env } from '$env/dynamic/private';
 
@@ -13,7 +13,7 @@ export const handle = async ({ event, resolve }) => {
 	if (token) {
 		try {
 			const SECRET_KEY = env.JWT_SECRET_KEY;
-			const decoded = jwt.verify(token, SECRET_KEY);
+			const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
             const result = await dbconn.query('SELECT * FROM users WHERE id = $1', [decoded.userId]);
             event.locals.user = {
                 userId: result.rows[0].id,

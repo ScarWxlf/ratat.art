@@ -5,10 +5,9 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			user: {
-				id: string;
+				userId: string;
 				username: string;
 				email: string;
-				password: string;
 			},
 			dbconn: PoolClient;
 		}
