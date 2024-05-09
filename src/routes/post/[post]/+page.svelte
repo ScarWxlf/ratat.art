@@ -4,8 +4,17 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	const imageName = data?.user?.userId;
-	const userImage = `/uploads/profilePictures/${imageName}.jpg`;
+	const user = data?.user;
+	const postOwner = data.postOwner; 
+	const postDB= data.post;
+	const currentUserImage = `/uploads/profilePictures/${user.userId}.jpg`;
+	const postUserImage = `/uploads/profilePictures/${postOwner.userId}.jpg`;
+
+	// table coments 
+	// id postId userId content
+
+	//table likes
+	// id postId userId
 
 	const post = {
 		postId: 0,
@@ -86,17 +95,18 @@
 			}
 		]
 	};
+	
 </script>
 
 <div class="flex w-full justify-center mt-1 mb-10">
 	<div class="flex w-8/12 bg-gray-200 rounded-2xl shadow-2xl">
 		<div class="w-6/12">
-			<img class=" rounded-tl-2xl rounded-bl-2xl object-cover" src={post.image} alt="post" />
+			<img class=" rounded-tl-2xl rounded-bl-2xl object-cover" src={postDB.image} alt="post" />
 		</div>
 		<div class="w-6/12 relative">
 			<div class="flex flex-col">
 				<div class="flex justify-between items-center py-3 h-24 px-10">
-					<a href={post.image} target="_blank">
+					<a href={postDB.image} target="_blank">
 						<button
 							class="flex items-center gap-2 text-white mt-2 bg-gray-400 py-2 px-4 rounded-3xl"
 							>View image<svg
@@ -122,19 +132,19 @@
 				</div>
 				<div class="overflow-x-auto max-h-[585px]">
 					<div class="px-7">
-						<h1 class="text-3xl">{post.title}</h1>
+						<h1 class="text-3xl">{postDB.title}</h1>
 						<ul class="flex gap-2 mt-2">
-							{#each post.tags as tag}
-								<li>{tag}</li>
+							{#each postDB.tags as tag}
+								<li>#{tag}</li>
 							{/each}
 						</ul>
-						<p class="text-xl mt-2">{post.description}</p>
+						<p class="text-xl mt-2">{postDB.description}</p>
 					</div>
 					<div class="flex w-full h-32 items-center justify-between px-7">
 						<div class="flex">
-							<img class="h-14 w-14 rounded-full" src={post.owner.image} alt="profile" />
-							<div class="px-2 text-center">
-								<p class="text-xl">{post.owner.username}</p>
+							<img class="h-14 w-14 rounded-full" src={postUserImage} alt="profile" />
+							<div class="px-2">
+								<p class="text-xl">{postOwner.username}</p>
 								<p class="text-sm">{post.owner.subs} subscribers</p>
 							</div>
 						</div>
@@ -144,26 +154,35 @@
 					</div>
 					<div class="flex flex-col px-7">
 						<p class="text-xl">Comments</p>
-						<ul class="flex flex-col mt-5">
-							{#each post.comments as coment}
-								<li class="py-2">
-									<div class="flex gap-2">
-										<img class="h-10 w-10 rounded-full" src={coment.owner.image} alt="profile" />
-										<p><span class="font-medium">{coment.owner.username}</span> {coment.content}</p>
-									</div>
-								</li>
-							{/each}
-						</ul>
+						{#if post.comments.length === 0}
+							<p class="w-full mt-1">No comments yet! Add one to start the conversation.</p>
+						{:else}
+							<ul class="flex flex-col mt-5">
+								{#each post.comments as coment}
+									<li class="py-2">
+										<div class="flex gap-2">
+											<img class="h-10 w-10 rounded-full" src={coment.owner.image} alt="profile" />
+											<p>
+												<span class="font-medium">{coment.owner.username}</span>
+												{coment.content}
+											</p>
+										</div>
+									</li>
+								{/each}
+							</ul>
+						{/if}
 					</div>
 				</div>
-				<div class="flex items-center absolute bottom-0 rounded-br-2xl w-full px-7 gap-2 border-t h-20 border-gray-400">
+				<div
+					class="flex items-center absolute bottom-0 rounded-br-2xl w-full px-7 gap-2 border-t h-20 border-gray-400"
+				>
 					<div class="flex w-full">
-					<img class="h-16 w-16 rounded-full" src={userImage} alt="profile" />
-					<input
-						class="w-full rounded-full bg-violet-100 text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:text-violet-950 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-						placeholder="Enter anything..."
-					/>
-				</div>
+						<img class="h-16 w-16 rounded-full" src={currentUserImage} alt="profile" />
+						<input
+							class="w-full rounded-full bg-violet-100 text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:text-violet-950 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+							placeholder="Enter comment"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
