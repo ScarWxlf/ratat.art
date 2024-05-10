@@ -2,15 +2,18 @@
 	import src from '$lib/images/saved.jpg';
 	import LikeButton from '$lib/components/Like-Button.svelte';
 	import type { PageData } from './$types';
+	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
 
 	export let data: PageData;
 	const user = data?.user;
-	const postOwner = data.postOwner; 
-	const postDB= data.post;
-	const currentUserImage = `/uploads/profilePictures/${user.userId}.jpg`;
-	const postUserImage = `/uploads/profilePictures/${postOwner.userId}.jpg`;
+	const postOwner = data?.postOwner;
+	const postDB = data?.post;
+	const currentUserImage = `/uploads/profilePictures/${user?.userId}.jpg`;
+	const postUserImage = `/uploads/profilePictures/${postOwner?.userId}.jpg`;
+	let isSubscribed: boolean;
+	isSubscribed = data?.isSubscribed;
 
-	// table coments 
+	// table coments
 	// id postId userId content
 
 	//table likes
@@ -95,13 +98,22 @@
 			}
 		]
 	};
-	
+	// let imageHeight;
+	// if (typeof window !== 'undefined') {
+	// 	let imageStyle = window.getComputedStyle(document.getElementById('image')!);
+	// 	imageHeight = imageStyle.height;
+	// }
 </script>
 
 <div class="flex w-full justify-center mt-1 mb-10">
 	<div class="flex w-8/12 bg-gray-200 rounded-2xl shadow-2xl">
-		<div class="w-6/12">
-			<img class=" rounded-tl-2xl rounded-bl-2xl object-cover" src={postDB.image} alt="post" />
+		<div class="flex h-full items-center w-6/12">
+			<img
+				class=" rounded-tl-2xl rounded-bl-2xl object-cover"
+				id="image"
+				src={postDB.image}
+				alt="post"
+			/>
 		</div>
 		<div class="w-6/12 relative">
 			<div class="flex flex-col">
@@ -141,15 +153,38 @@
 						<p class="text-xl mt-2">{postDB.description}</p>
 					</div>
 					<div class="flex w-full h-32 items-center justify-between px-7">
-						<div class="flex">
-							<img class="h-14 w-14 rounded-full" src={postUserImage} alt="profile" />
-							<div class="px-2">
-								<p class="text-xl">{postOwner.username}</p>
-								<p class="text-sm">{post.owner.subs} subscribers</p>
+						<a href="/user/{postOwner.username}">
+							<div class="flex">
+								<img
+									class="h-14 w-14 rounded-full object-cover"
+									src={postUserImage}
+									alt="profile"
+								/>
+								<div class="px-2">
+									<p class="text-xl">{postOwner.username}</p>
+									<p class="text-sm">{postOwner.subscribersCount} subscribers</p>
+								</div>
 							</div>
-						</div>
+						</a>
 						<div>
-							<button class="text-white mt-2 bg-red-500 py-2 px-4 rounded-3xl">Subscribe</button>
+							{#if data.auth && user.userId !== postOwner.userId && !isSubscribed}
+								<!-- <form method="POST" action="/api/subscribe">
+								<button class="text-white mt-2 bg-green-500 py-2 px-4 rounded-3xl">Subscribe</button>
+							</form> -->
+								<button
+									on:click={async () => {
+										isSubscribed = await handleSubscribe(postOwner.userId);
+									}}
+									class="text-white mt-2 bg-red-500 py-2 px-4 rounded-3xl">Subscribe</button
+								>
+							{:else if data.auth && user.userId !== postOwner.userId}
+								<button
+									on:click={async () => {
+										isSubscribed = await handleUnSubscribe(postOwner.userId);
+									}}
+									class="mt-2 bg-gray-300 py-2 px-4 rounded-3xl">Unsubscribe</button
+								>
+							{/if}
 						</div>
 					</div>
 					<div class="flex flex-col px-7">
@@ -174,14 +209,28 @@
 					</div>
 				</div>
 				<div
-					class="flex items-center absolute bottom-0 rounded-br-2xl w-full px-7 gap-2 border-t h-20 border-gray-400"
+					class="flex items-center bottom-0 rounded-br-2xl w-full px-7 gap-2 border-t h-20 border-gray-400 bg-gray-200"
 				>
-					<div class="flex w-full">
-						<img class="h-16 w-16 rounded-full" src={currentUserImage} alt="profile" />
-						<input
-							class="w-full rounded-full bg-violet-100 text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:text-violet-950 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-							placeholder="Enter comment"
-						/>
+					<div class="flex w-full gap-2">
+						{#if data.auth}
+							<img
+								class="h-16 w-16 rounded-full object-cover"
+								src={currentUserImage}
+								alt="profile"
+							/>
+							<input
+								class="w-full rounded-full bg-violet-100 text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+								placeholder="Enter comment"
+							/>
+						{:else}
+							<div class="flex w-full justify-center">
+								<a href="/sign-in">
+									<button class="bg-green-500 rounded-3xl py-2 px-4 text-2xl"
+										>Login to comment</button
+									>
+								</a>
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>

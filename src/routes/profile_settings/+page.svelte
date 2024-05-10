@@ -1,8 +1,5 @@
 <script lang="ts">
 	export let data;
-
-	const imageName = data.user.userId;
-    let src = `/uploads/profilePictures/${imageName}.jpg`;
 </script>
 
 <div class="flex flex-col">
@@ -13,7 +10,7 @@
 			your profile.
 		</p>
 		<div class="flex gap-5 items-end mt-3">
-			<img class="h-36 w-36 rounded-full object-cover" {src} alt="profile" />
+			<img class="h-36 w-36 rounded-full object-cover" src={data.user.image} alt="profile" />
 			<form method="POST" enctype="multipart/form-data" action="?/public_profile_picture">
 				<div class="grid w-full max-w-xs items-center gap-1.5">
 					<label

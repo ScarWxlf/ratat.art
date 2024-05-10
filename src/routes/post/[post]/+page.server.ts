@@ -9,12 +9,23 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     }
     const userId = result.rows[0].userid;
     const userResult = await locals.dbconn.query("SELECT * FROM users WHERE id = $1", [userId]);
+    
+    let isSubscribed = false;
+    if(locals.user && locals.user.userId !== userId){
+        const subResult = await locals.dbconn.query("SELECT * FROM subscribers WHERE subscriber_id = $1 AND author_id = $2", [locals.user.userId, userId]);
+        if(subResult.rows[0]){
+            isSubscribed = true;
+        }
+    }
+    const subscribersCount = await locals.dbconn.query("SELECT COUNT(*) FROM subscribers WHERE author_id = $1", [userId]);
     return {
         postOwner: {
             userId: userResult.rows[0].id,
             username: userResult.rows[0].username,
+            subscribersCount: subscribersCount.rows[0].count
         },
         user: locals.user,
-        post: result.rows[0]
+        post: result.rows[0],
+        isSubscribed: isSubscribed
     }
 };

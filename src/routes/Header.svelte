@@ -5,6 +5,7 @@
 <div class="fixed w-full bg-white dark:bg-slate-900 dark:text-white z-50 h-11">
 	<header class="flex flex-row p-2">
 		<a href="/">🐁 ratat.art</a>
+		<a href="/create-post" class="ms-3 text-white bg-black px-2 rounded-2xl">Create</a>
 		<div class="flex-grow" />
 		<slot />
 	</header>

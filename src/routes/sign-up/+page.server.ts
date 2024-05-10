@@ -17,6 +17,7 @@ export const actions: Actions = {
 		const password = data.get('password') as string;
 		const password2 = data.get('password2');
 		const captcha = data.get('g-recaptcha-response');
+		const image = '/avatar.jpg';
 
 		if ([username, email, password, password2].some((e) => !e)) {
 			return fail(400, {
@@ -60,7 +61,7 @@ export const actions: Actions = {
 			} else {
 				try {
 					console.log(hash);
-				  const result = await locals.dbconn.query("INSERT INTO users(username, email, password) VALUES($1, $2, $3)", [username, email, hash]);
+				  const result = await locals.dbconn.query("INSERT INTO users(username, email, password, image) VALUES($1, $2, $3, $4)", [username, email, hash, image]);
 				  console.log(result)
 				} catch (error) {
 					console.log(error)

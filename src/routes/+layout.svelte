@@ -28,12 +28,12 @@
 					<label>
 						<input class="toggle-checkbox" type="checkbox" on:click={() => toggleDarkMode()}>
 						<div class="toggle-slot">
-						  <div class="sun-icon-wrapper">
+						  <div class="sun-icon-wrapper hidden">
 							<div class="iconify sun-icon" data-icon="feather-sun" data-inline="false"></div>
 						  </div>
 						  <div class="toggle-button"></div>
-						  <div class="moon-icon-wrapper">
-							<div class="iconify moon-icon" data-icon="feather-moon" data-inline="false"></div>
+						  <div class="moon-icon-wrapper hidden">
+							<div class="iconify moon-icon hidden" data-icon="feather-moon" data-inline="false"></div>
 						  </div>
 						</div>
 					  </label>
@@ -81,7 +81,7 @@
   width: 7em;
   border: 0px solid transparent;
   border-radius: 10em;
-  background-color: white;
+  background-color: rgb(226, 226, 226);
   transition: background-color 250ms;
 }
 

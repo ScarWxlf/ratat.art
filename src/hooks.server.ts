@@ -18,7 +18,8 @@ export const handle = async ({ event, resolve }) => {
             event.locals.user = {
                 userId: result.rows[0].id,
                 username: result.rows[0].username,
-                email: result.rows[0].email
+                email: result.rows[0].email,
+				image: result.rows[0].image
             }
 
 		} catch (err) {

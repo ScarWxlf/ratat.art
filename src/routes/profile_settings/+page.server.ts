@@ -32,6 +32,8 @@ export const actions = {
 		const picture = data.get('picture');
 		const filename = `static/uploads/profilePictures/${locals.user.userId}${extname(picture?.name)}`;
     	await writeFile(filename, Buffer.from(await picture?.arrayBuffer()));
+		const filenameDB = `/uploads/profilePictures/${locals.user.userId}${extname(picture?.name)}`
+		await locals.dbconn.query('UPDATE users SET image = $1 WHERE id = $2', [filenameDB, locals.user.userId]);
 
 		return { success: true };
 	}
