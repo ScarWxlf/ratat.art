@@ -1,25 +1,32 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
-	import created from '$lib/images/created.jpg';
-	import saved from '$lib/images/saved.jpg';
 	import Layout from '$lib/components/Layout.svelte';
 	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
 
 	export let data: PageData;
-	let open: string;
 	let isSubscribed: boolean;
 	isSubscribed = data?.isSubscribed;
 	const user = data?.user;
 	let userPage;
 	$: userPage = data?.userPage;
+
+	let postsType='liked';
+	let limit = 2;
+
+	const getUserPosts = async () => {
+		const res = await fetch(`/api/user-posts?userId=${userPage.userId}&limit=${limit}&type=${postsType}`);
+		const data = await res.json();
+		limit += 2;
+		return data;
+	};
 </script>
 
 <div class="flex flex-col items-center">
 	<div class="flex flex-col items-center">
 		<img class="h-36 w-36 rounded-full object-cover" src={userPage.image} alt="profile" />
 		<h1 class="text-5xl font-bold mt-2">{userPage.username}</h1>
-		<p class="mt-2">{userPage.subscribersCount} subscribers</p>
+		<p class="mt-2 mb-1">{userPage.subscribersCount} subscribers</p>
 		{#if userPage.username === data?.username}
 			<a href="/profile_settings"
 				><button class="mt-2 bg-gray-300 py-2 px-4 rounded-3xl">Edit Profile</button></a
@@ -43,31 +50,29 @@
 			>
 		{/if}
 	</div>
-	<div class="flex justify-center mt-2 gap-8">
+	<div class="flex justify-center mt-8 gap-8 mb-2">
 		<button
-			class="py-1 px-2 hover:bg-gray-300 rounded-lg"
+			class="py-1 px-2 hover:bg-gray-300 rounded-lg {postsType === 'created' ? 'bg-gray-400' : ''}"
 			on:click={(e) => {
-				open = 'created';
+				postsType = 'created';
 			}}
 		>
 			Created
 		</button>
 		<button
-			class="py-1 px-2 hover:bg-gray-300 rounded-lg"
+			class="py-1 px-2 hover:bg-gray-300 rounded-lg {postsType === 'liked' ? 'bg-gray-400' : ''}"
 			on:click={(e) => {
-				open = 'saved';
+				postsType = 'liked';
 			}}
 		>
-			Saved
+			Liked
 		</button>
 	</div>
 	<div class="flex w-10/12 mt-2">
-		{#if open === 'created'}
-			<img class="w-60 rounded-xl" src={created} alt="created" />
-			<!-- <Layout a={0} b={3} /> -->
+		{#if postsType === 'created'}
+			<Layout getPosts={getUserPosts}/>
 		{:else}
-			<img class="w-60 rounded-xl" src={saved} alt="saved" />
-			<!-- <Layout a={0} b={9} /> -->
+			<Layout getPosts={getUserPosts}/>
 		{/if}
 	</div>
 </div>

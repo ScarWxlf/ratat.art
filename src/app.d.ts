@@ -8,6 +8,7 @@ declare global {
 				userId: string;
 				username: string;
 				email: string;
+				image: string;
 			},
 			dbconn: PoolClient;
 		}

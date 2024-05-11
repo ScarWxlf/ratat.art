@@ -1,9 +1,21 @@
-<script>
-	
+<script lang='ts'>
+	import {handleLike} from './likeFunctions';
+	import {page} from '$app/stores';
+	import {goto, invalidate} from '$app/navigation';
+	const isAuth = $page.data.auth;	
+	export let postId;
+	export let isLiked;
 </script>
 
 <div class="heart-container" title="Like">
-    <input type="checkbox" class="checkbox" id="Give-It-An-Id" />
+    <input type="checkbox" checked={isLiked} class="checkbox" id="Give-It-An-Id" on:click={ async (e)=>{
+		if(!isAuth){
+			goto('/sign-in')
+			return;
+		}
+		await handleLike(postId);
+		// invalidate('app:post');
+	}} />
     <div class="svg-container">
         <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
             <path
