@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Header from './Header.svelte';
 	import { dark } from '$lib/dark';
+	import {page} from '$app/stores';
 
 	export let data;
 
@@ -20,7 +21,7 @@
 	<meta name="description" content="ratat.art" />
 </svelte:head>
 
-<div class="dark:bg-slate-800 dark:text-white">
+<div class="flex dark:bg-slate-800 dark:text-white min-h-screen">
 	<Header>
 		<nav>
 			
@@ -60,9 +61,11 @@
 		</nav>
 	</Header>
 
-	<main class="flex flex-col">
+	<main class="flex flex-col flex-grow">
 		<div class="h-14" />
-		<slot />
+		{#key $page.url}
+			<slot />
+		{/key}
 	</main>
 </div>
 

@@ -58,14 +58,14 @@
 	<div class="flex w-8/12 rounded-2xl shadow-gray-700 shadow-2xl">
 		<div class="flex h-full items-center w-6/12">
 			<img
-				class=" rounded-tl-2xl rounded-bl-2xl object-cover"
+				class=" rounded-tl-2xl rounded-bl-2xl w-full object-cover"
 				id="image"
 				src={postDB.image}
 				alt="post"
 			/>
 		</div>
-		<div class="w-6/12 relative">
-			<div class="flex flex-col">
+		<div class="flex flex-col w-6/12 relative">
+			
 				<div class="flex justify-between items-center py-3 h-24 px-7">
 					<div class="flex items-center gap-4">
 						<div class="flex justify-center relative">
@@ -150,7 +150,7 @@
 								<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 								<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
 									<div
-										class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+										class="flex items-end justify-center p-4 text-center sm:items-center sm:p-0"
 									>
 										<div
 											class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
@@ -222,7 +222,7 @@
 					</div>
 					<LikeButton {isLiked} postId={postDB.id} />
 				</div>
-				<div class="overflow-x-auto min-h-[350px] max-h-[585px]">
+				<div class="overflow-y-auto flex-grow max-h-[585px]">
 					<div class="px-7">
 						<h1 class="text-3xl">{postDB.title}</h1>
 						<ul class="flex gap-2 mt-2">
@@ -346,7 +346,6 @@
 						{/if}
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 </div>

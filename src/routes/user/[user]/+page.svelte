@@ -78,16 +78,18 @@
 		</div>
 	</div>
 	<div class="flex w-10/12 mt-2">
-		{#if postsType === 'created'}
-			<!-- {#if items.length === 0}
-				<div class="flex justify-center w-full">{userPage.username} hasn't no post yet, but there's tons of potential </div>
-			{/if} -->
-			<Layout bind:images={items} getPosts={getUserPosts} />
-		{:else}
-			<!-- {#if items.length === 0}
-				<div class="flex justify-center w-full">{userPage.username} hasn't saved any posts yet</div>
-			{/if} -->
-			<Layout bind:images={items} getPosts={getUserPosts} />
-		{/if}
+		{#key postsType}
+			{#if postsType === 'created'}
+				<!-- {#if items.length === 0}
+					<div class="flex justify-center w-full">{userPage.username} hasn't no post yet, but there's tons of potential </div>
+				{/if} -->
+				<Layout bind:images={items} getPosts={getUserPosts} />
+			{:else}
+				<!-- {#if items.length === 0}
+					<div class="flex justify-center w-full">{userPage.username} hasn't saved any posts yet</div>
+				{/if} -->
+				<Layout bind:images={items} getPosts={getUserPosts} />
+			{/if}
+		{/key}
 	</div>
 </div>

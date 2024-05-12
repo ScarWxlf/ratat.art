@@ -9,6 +9,7 @@
 
 <div class="heart-container" title="Like">
     <input type="checkbox" checked={isLiked} class="checkbox" id="Give-It-An-Id" on:click={ async (e)=>{
+		e.stopPropagation();
 		if(!isAuth){
 			goto('/sign-in')
 			return;
