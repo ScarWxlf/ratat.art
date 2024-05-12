@@ -2,10 +2,10 @@
 	import src from '$lib/images/saved.jpg';
 	import LikeButton from '$lib/components/Like-Button.svelte';
 	import type { PageData } from './$types';
-	import { invalidateAll } from '$app/navigation';
-	import { applyAction, deserialize } from '$app/forms';
 	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
-	import { comment } from 'postcss';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 
 	export let data: PageData;
 	const user = data?.user;
@@ -20,46 +20,42 @@
 	isSubscribed = data?.isSubscribed;
 	let commentButtonDisabled = true;
 
-	const post = {
-		postId: 0,
-		title: 'Post Title',
-		description:
-			'Post Description Here lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatem.',
-		image: src,
-		owner: {
-			image: '/uploads/profilePictures/3.jpg',
-			username: 'ScarWxlf',
-			subs: 0
-		},
-		tags: ['#cat', '#orange']
-	};
+	// let pageId = postDB.id;
+
+	// $: {
+	// 	if(pageId !== $page.params.post){
+	// 		pageId = $page.params.post;
+	// 		invalidateAll();
+	// 	}
+	// }
+
 	// let imageHeight;
 	// if (typeof window !== 'undefined') {
 	// 	let imageStyle = window.getComputedStyle(document.getElementById('image')!);
 	// 	imageHeight = imageStyle.height;
 	// }
 
-	// /** @param {{ currentTarget: EventTarget & HTMLFormElement}} event */
-	// async function handleSubmit(event){
-	// 	const request = new FormData(event.target);
-	// 	const response = await fetch(event.currentTarget.action, {
-	// 		method: 'POST',
-	// 		body: data
-	// 	});
+	let visDrop = false;
 
-	// 	/** @type {import('@sveltejs/kit').ActionResult} */
-	// 	const result = deserialize(await response.text());
+	const handleClickOutside = (event) => {
+		const dropdown = document.getElementById('dropdown');
+		if (dropdown && !dropdown.contains(event.target)) {
+			visDrop = false;
+		}
+	};
 
-	// 	if (result.type === 'success') {
-	// 		await invalidateAll();
-	// 	}
+	onMount(() => {
+		document.addEventListener('click', handleClickOutside);
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+		};
+	});
 
-	// 	applyAction(result);
-	// }
+	let showModal = false;
 </script>
 
 <div class="flex w-full justify-center mt-1 mb-10">
-	<div class="flex w-8/12 bg-gray-200 rounded-2xl shadow-2xl">
+	<div class="flex w-8/12 rounded-2xl shadow-gray-700 shadow-2xl">
 		<div class="flex h-full items-center w-6/12">
 			<img
 				class=" rounded-tl-2xl rounded-bl-2xl object-cover"
@@ -70,29 +66,160 @@
 		</div>
 		<div class="w-6/12 relative">
 			<div class="flex flex-col">
-				<div class="flex justify-between items-center py-3 h-24 px-10">
-					<a href={postDB.image} target="_blank">
-						<button
-							class="flex items-center gap-2 text-white mt-2 bg-gray-400 py-2 px-4 rounded-3xl"
-							>View image<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="16"
-								height="16"
-								fill="currentColor"
-								class="bi bi-box-arrow-up-right"
-								viewBox="0 0 16 16"
+				<div class="flex justify-between items-center py-3 h-24 px-7">
+					<div class="flex items-center gap-4">
+						<div class="flex justify-center relative">
+							<button
+								class="flex items-centergap-2 mt-2 p-2 rounded-full {visDrop
+									? 'bg-gray-400'
+									: 'hover:bg-gray-300'}"
+								id="dropdown"
+								on:click={() => {
+									visDrop = !visDrop;
+								}}
 							>
-								<path
-									fill-rule="evenodd"
-									d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-								/>
-								<path
-									fill-rule="evenodd"
-									d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-								/>
-							</svg></button
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink"
+									fill="#000000"
+									height="32px"
+									width="32px"
+									version="1.1"
+									id="Capa_1"
+									viewBox="0 0 32.055 32.055"
+									xml:space="preserve"
+								>
+									<g>
+										<path
+											d="M3.968,12.061C1.775,12.061,0,13.835,0,16.027c0,2.192,1.773,3.967,3.968,3.967c2.189,0,3.966-1.772,3.966-3.967   C7.934,13.835,6.157,12.061,3.968,12.061z M16.233,12.061c-2.188,0-3.968,1.773-3.968,3.965c0,2.192,1.778,3.967,3.968,3.967   s3.97-1.772,3.97-3.967C20.201,13.835,18.423,12.061,16.233,12.061z M28.09,12.061c-2.192,0-3.969,1.774-3.969,3.967   c0,2.19,1.774,3.965,3.969,3.965c2.188,0,3.965-1.772,3.965-3.965S30.278,12.061,28.09,12.061z"
+										/>
+									</g>
+								</svg>
+							</button>
+							<div
+								class="absolute top-16 bg-white rounded-md shadow-2xl ring-1 ring-gray-200 {visDrop ? '' : 'hidden'}"
+							>
+								<ul class="">
+									{#if data.auth && user.userId === postOwner.userId}
+										<li>
+											<button
+												class="w-full px-4 py-2 rounded-md hover:bg-gray-300"
+												on:click={() => {
+													showModal = true;
+												}}
+											>
+												Delete
+											</button>
+										</li>
+									{/if}
+									<li class="px-4 py-2 rounded-md hover:bg-gray-300">
+										<a href={postDB.image} download>Download</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<a href={postDB.image} target="_blank">
+							<button
+								class="flex items-center gap-2 text-white mt-2 bg-gray-400 py-2 px-4 rounded-3xl"
+								>View image<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									fill="currentColor"
+									class="bi bi-box-arrow-up-right"
+									viewBox="0 0 16 16"
+								>
+									<path
+										fill-rule="evenodd"
+										d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
+									/>
+									<path
+										fill-rule="evenodd"
+										d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
+									/>
+								</svg></button
+							>
+						</a>
+						<div
+							class="relative z-10"
+							aria-labelledby="modal-title"
+							role="dialog"
+							aria-modal="true"
 						>
-					</a>
+							{#if showModal}
+								<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+								<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+									<div
+										class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+									>
+										<div
+											class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+										>
+											<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+												<div class="sm:flex sm:items-start">
+													<div
+														class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+													>
+														<svg
+															class="h-6 w-6 text-red-600"
+															fill="none"
+															viewBox="0 0 24 24"
+															stroke-width="1.5"
+															stroke="currentColor"
+															aria-hidden="true"
+														>
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+															/>
+														</svg>
+													</div>
+													<div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+														<h3
+															class="text-base font-semibold leading-6 text-gray-900"
+															id="modal-title"
+														>
+															Delete post
+														</h3>
+														<div class="mt-2">
+															<p class="text-sm text-gray-500">
+																Are you sure you want to delete this post? This action cannot be
+																undone.
+															</p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+												<button
+													type="button"
+													class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+													on:click={async () => {
+														// const confirmed = confirm('Are you sure you want to delete this post?');
+															await fetch(`/api/delete-post?id=${postDB.id}`, {
+																method: 'DELETE'
+															}).then((res) => {
+																if (res.ok) {
+																	goto('/');
+																}
+															});
+													}}>Delete</button
+												>
+												<button
+													type="button"
+													class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+													on:click={() => {
+														showModal = false;
+													}}>Cancel</button
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+							{/if}
+						</div>
+					</div>
 					<LikeButton {isLiked} postId={postDB.id} />
 				</div>
 				<div class="overflow-x-auto min-h-[350px] max-h-[585px]">
@@ -100,7 +227,7 @@
 						<h1 class="text-3xl">{postDB.title}</h1>
 						<ul class="flex gap-2 mt-2">
 							{#each postDB.tags as tag}
-								<li>#{tag}</li>
+								<li><a href="/search/{tag}">#{tag}</a></li>
 							{/each}
 						</ul>
 						<p class="text-xl mt-2">{postDB.description}</p>
@@ -172,7 +299,7 @@
 					</div>
 				</div>
 				<div
-					class="flex items-center bottom-0 rounded-br-2xl w-full px-4 gap-2 border-t h-20 border-gray-400 bg-gray-200"
+					class="flex items-center bottom-0 rounded-br-2xl w-full px-4 gap-2 border-t h-20 border-gray-400"
 				>
 					<div class="flex w-full gap-2">
 						{#if data.auth}
@@ -223,3 +350,6 @@
 		</div>
 	</div>
 </div>
+
+<style>
+</style>

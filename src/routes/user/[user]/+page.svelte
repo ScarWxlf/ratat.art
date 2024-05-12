@@ -11,15 +11,18 @@
 	let userPage;
 	$: userPage = data?.userPage;
 
-	let postsType='liked';
+	let postsType = 'liked';
 	let limit = 2;
 
 	const getUserPosts = async () => {
-		const res = await fetch(`/api/user-posts?userId=${userPage.userId}&limit=${limit}&type=${postsType}`);
+		const res = await fetch(
+			`/api/user-posts?userId=${userPage.userId}&limit=${limit}&type=${postsType}`
+		);
 		const data = await res.json();
 		limit += 2;
 		return data;
 	};
+	let items = [];
 </script>
 
 <div class="flex flex-col items-center">
@@ -50,29 +53,41 @@
 			>
 		{/if}
 	</div>
-	<div class="flex justify-center mt-8 gap-8 mb-2">
-		<button
-			class="py-1 px-2 hover:bg-gray-300 rounded-lg {postsType === 'created' ? 'bg-gray-400' : ''}"
-			on:click={(e) => {
-				postsType = 'created';
-			}}
-		>
-			Created
-		</button>
-		<button
-			class="py-1 px-2 hover:bg-gray-300 rounded-lg {postsType === 'liked' ? 'bg-gray-400' : ''}"
-			on:click={(e) => {
-				postsType = 'liked';
-			}}
-		>
-			Liked
-		</button>
+	<div class="flex justify-center mt-8 gap-4 mb-2">
+		<div class="flex flex-col items-center">
+			<button
+				class="py-1 px-2 hover:bg-gray-300 rounded-lg"
+				on:click={(e) => {
+					postsType = 'created';
+				}}
+			>
+				Created
+			</button>
+			<div class="h-0.5 mt-0.5 w-3/4 bg-black {postsType === 'created' ? '' : 'collapse'}" />
+		</div>
+		<div class="flex flex-col items-center">
+			<button
+				class="py-1 px-2 hover:bg-gray-300 rounded-lg"
+				on:click={(e) => {
+					postsType = 'liked';
+				}}
+			>
+				Liked
+			</button>
+			<div class="h-0.5 mt-0.5 w-3/4 bg-black {postsType === 'liked' ? '' : 'collapse'}" />
+		</div>
 	</div>
 	<div class="flex w-10/12 mt-2">
 		{#if postsType === 'created'}
-			<Layout getPosts={getUserPosts}/>
+			<!-- {#if items.length === 0}
+				<div class="flex justify-center w-full">{userPage.username} hasn't no post yet, but there's tons of potential </div>
+			{/if} -->
+			<Layout bind:images={items} getPosts={getUserPosts} />
 		{:else}
-			<Layout getPosts={getUserPosts}/>
+			<!-- {#if items.length === 0}
+				<div class="flex justify-center w-full">{userPage.username} hasn't saved any posts yet</div>
+			{/if} -->
+			<Layout bind:images={items} getPosts={getUserPosts} />
 		{/if}
 	</div>
 </div>

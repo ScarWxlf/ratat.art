@@ -12,8 +12,12 @@ export const GET: RequestHandler = async ({ request, locals }) => {
     if(+limit! >= +count.rows[0].count){
         canRequestMore = false;
     }
-    const likedPosts = await locals.dbconn.query("SELECT * FROM likes WHERE user_id = $1", [userId]);
-    const liked = likedPosts.rows.map((post) => post.post_id);
+
+    let liked = [];
+    if(locals.user){
+        const likedPosts = await locals.dbconn.query("SELECT * FROM likes WHERE user_id = $1", [locals.user.userId]);
+        liked = likedPosts.rows.map((post) => post.post_id);
+    }
 
     if(type === 'liked'){
         const result = await locals.dbconn.query(`SELECT * FROM posts WHERE id IN (SELECT post_id FROM likes WHERE user_id = $1) LIMIT ${limit}`, [userId]);

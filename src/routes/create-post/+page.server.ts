@@ -5,7 +5,7 @@ import { extname } from 'path';
 
 export const load: PageServerLoad = ({ cookies }) => {
 	if (!cookies.get('auth')) {
-		throw redirect(302, '/');
+		throw redirect(302, '/sign-in');
 	}
 };
 

@@ -1,8 +1,7 @@
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-    // depends('app:post')
     const post = params.post;
     const result = await locals.dbconn.query("SELECT * FROM posts WHERE id = $1", [post]);
     if (!result.rows[0]) {

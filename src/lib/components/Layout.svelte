@@ -4,8 +4,7 @@
 	import { onMount } from 'svelte';
     export let getPosts;
 
-	let images = [];
-	let limit = 5;
+	export let images = [];
 	let canRequestMore = true;
 	let likedPosts = [];
 	onMount(async () => {
@@ -13,6 +12,7 @@
 		images = result.images;
         canRequestMore = result.canRequestMore;
 		likedPosts = result.likedPosts;
+
 	});
 
 	let innerWidth = 0;

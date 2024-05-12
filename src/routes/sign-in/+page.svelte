@@ -11,7 +11,7 @@
 	<script src="https://www.google.com/recaptcha/api.js?render={SITE_KEY}" async defer></script>
 </svelte:head>
 
-<div class="flex items-center justify-center h-full mb-24">
+<div class="flex items-center justify-center h-full">
 	<div class="container items-center flex flex-col">
 		<form
 			method="POST"

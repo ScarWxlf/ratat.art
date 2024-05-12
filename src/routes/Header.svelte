@@ -8,7 +8,7 @@
 
 	const handleSearch = async (e) => {
 		searchValue = e.target.value;
-		if(e.target.value === '') {
+		if (e.target.value === '') {
 			searchItems = [];
 			return;
 		}
@@ -29,7 +29,7 @@
 >
 	<header class="flex flex-row p-2">
 		<a href="/">🐁 ratat.art</a>
-		<a href="/create-post" class="ms-3 text-white bg-black px-2 rounded-2xl">Create</a>
+		<a href="/create-post" class="ms-3 px-2 rounded-2xl">Create</a>
 
 		<div class="flex mx-8 flex-grow form relative justify-center">
 			<button>
@@ -50,12 +50,20 @@
 					/>
 				</svg>
 			</button>
-			<input on:input={handleSearch}
+			<input
+				bind:value={searchValue}
+				on:input={handleSearch}
 				on:click={() => {
 					isSearchOpen = true;
 				}}
-			 class="input" placeholder="Type your text" type="text" />
-			<button class="reset" type="reset">
+				class="input"
+				placeholder="Type your text"
+				type="text"
+			/>
+			<button class="reset me-2" type="reset" on:click={()=>{
+				searchValue = '';
+				searchItems = [];
+			}}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -71,33 +79,49 @@
 
 		<slot />
 	</header>
-	<div class="flex justify-center w-screen h-screen absolute bg-black bg-opacity-50 {isSearchOpen ? '' : 'hidden'}"
+	<div
+		class="flex flex-col items-center w-screen h-screen absolute bg-black bg-opacity-50 {isSearchOpen
+			? ''
+			: 'hidden'}"
 		on:click={() => {
-		isSearchOpen = false;}}
+			isSearchOpen = false;
+		}}
 		role="button"
 		tabindex="0"
 		on:keydown={() => {}}
 	>
-		<div class="w-3/4 h-5/6 bg-white rounded-b-2xl">
-			{#if searchItems && searchItems.length > 0 }
-				{#each searchItems as item}
-					<div class="flex items-center w-full h-16 border-b border-gray-400">
+		<div class="w-3/4 h-auto bg-white rounded-b-2xl overflow-y-auto">
+			{#if searchItems && searchItems.length > 0}
+				{#each searchItems as item, index}
+					{#if index < 10}
 						{#if item.type === 'name'}
-							<a class="flex items-center ms-3 gap-2" href={`/search/${item.title}`}>🔍 {item.title}</a>
+						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300" href={`/post/${item.id}`}>
+							<div class="flex items-center ms-3 gap-2">
+								🔍 {item.title}
+							</div>
+						</a>
 						{:else if item.type === 'tag'}
-							<a class="flex items-center ms-3 gap-2" href={`/search/${item.tag}`}>
-								🔍 #{item.tags.filter((tag) => tag.includes(searchValue.toLowerCase()))}
-							</a>
+						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300" href={`/search/${item.tag}`}>
+							<div class="flex items-center ms-3 gap-2">
+									🔍 #{item.tag}
+								</div>
+							</a>  
 						{:else if item.type === 'user'}
-							<a class="flex items-center ms-3 gap-2" href={`/user/${item.username}`}>
-								<img class="h-14 w-14 rounded-full object-cover" src={item.image} alt={item.title} />
-								{item.username}
+						<a class="flex items-center w-full h-16 ps-3 hover:bg-gray-300" href={`/user/${item.username}`}>
+							<div class="flex items-center ms-3 gap-2">
+									<img
+										class="h-14 w-14 rounded-full object-cover"
+										src={item.image}
+										alt={item.title}
+									/>
+									{item.username}
+								</div>
 							</a>
 						{/if}
-					</div>
+					{/if}
 				{/each}
 			{/if}
-		</div>	
+		</div>
 	</div>
 </div>
 
