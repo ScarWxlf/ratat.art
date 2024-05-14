@@ -13,7 +13,7 @@
 		<form class="flex flex-col" method="POST" action="?/personal_profile_email">
 			<p class="text-2xl mt-3">Email</p>
 			<input
-				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
+				class="mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-1/2 px-3 py-1 text-base cursor-pointer transition"
 				type="email"
 				name="email"
                 value={data?.user?.email ? data.user.email : ''}
@@ -21,26 +21,26 @@
 			{#if form?.message}
 				<p class="text-red-400">{form.message}</p>
 			{/if}
-			<button class="mt-4 py-2 px-4 rounded-full bg-gray-400 w-4/12" type="submit">Submit</button>
+			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2" type="submit">Submit</button>
 		</form>
 		<form class="flex flex-col" method="POST" action="?/personal_profile">
             <!-- <Input name='email' label='Email' value={data?.user?.email}/> -->
 			<p class="text-2xl mt-3">Old password</p>
 			<input
-				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
+				class="mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-1/2 px-3 py-1 text-base cursor-pointer transition"
 				type="password"
 				name="old_password"
 			/>
 			<p class="text-2xl mt-3">New password</p>
 			<input
-				class=" mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-96 px-6 py-3 text-base cursor-pointer transition"
+				class="mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-1/2 px-3 py-1 text-base cursor-pointer transition"
 				type="password"
 				name="new_password"
 			/>
 			{#if form?.messagePassword}
 				<p class="text-red-400">{form.messagePassword}</p>
 			{/if}
-            <button class="mt-4 py-2 px-4 rounded-full bg-gray-400 w-4/12" type="submit">Submit</button>
+            <button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2" type="submit">Submit</button>
 		</form>
 	</div>
 </div>

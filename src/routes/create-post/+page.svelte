@@ -14,6 +14,10 @@
 		const tags = document.getElementById('hiddenTags') as HTMLInputElement;
 		const tagInput = document.querySelector('input[name="tags"]') as HTMLInputElement;
 		const tag = tagInput.value;
+		if(tags.value.split(',').includes(tag) || tag === ''){
+			tagInput.value = '';
+			return;
+		}
 		if(tags.value === ''){
 			tags.value = tag;
 		}else{
@@ -32,7 +36,7 @@
 	}
 
 	const deleteButton = (e: any) => {
-		e.target.parentElement.parentElement.remove()
+		e.target.parentElement.remove()
 	}
 </script>
 
@@ -46,7 +50,7 @@
 		enctype="multipart/form-data"
 		action="?/create-post"
 	>
-		<div class="w-5/12 flex justify-center items-center max-h-[500px] max-w-[500px] mt-4 ms-2">
+		<div class="w-6/12 flex justify-center items-center max-h-[500px] max-w-[500px] mt-4 ms-2">
 			<div
 				class="flex justify-center items-center bg-gray-200 h-[450px] w-7/12 rounded-2xl relative {loading
 					? ''
@@ -87,9 +91,9 @@
 				alt="preview"
 			/>
 		</div>
-		<div class="w-7/12">
+		<div class="w-6/12">
 			<div class="flex flex-col gap-4 w-full mt-6">
-				<div class="px-3 w-8/12">
+				<div class="px-3 w-7/12">
 					<p class="text-lg">Title</p>
 					<input
 						class="h-11 w-full rounded-xl text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -97,7 +101,7 @@
 						name="title"
 					/>
 				</div>
-				<div class="px-3 w-8/12">
+				<div class="px-3 w-7/12">
 					<p class="text-lg">Description</p>
 					<textarea
 						class="h-32 w-full resize-none rounded-xl text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -105,20 +109,20 @@
 						name="description"
 					/>
 				</div>
-				<form class="flex flex-col gap-2 px-3 w-8/12" on:submit|preventDefault ={handleAddTag}>
+				<form class="flex flex-col px-3 w-7/12" on:submit|preventDefault ={handleAddTag}>
 					<p class="text-lg">Tags</p>
 					<input
 						class="h-11 w-full rounded-xl text-xl border-2 border-gray-500 p-4 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
 						placeholder="Add tag"
 						name="tags"
 					/>
-					<button class="bg-red-500 self-end text-white py-1 px-2 rounded-full text-lg w-2/12" type="submit"
+					<button class="mt-2 bg-red-500 self-end text-white py-1 px-2 rounded-full text-lg w-3/12" type="submit"
 						>Add tag</button
 					>
 				</form>
 				<input type="hidden" name="hiddenTags" id="hiddenTags" value="">
-				<div class="px-3 w-8/12 flex flex-grow gap-2 flex-wrap" id='tagsButtons'></div>
-				<div class="w-8/12 flex justify-center">
+				<div class="px-3 w-7/12 flex flex-grow gap-2 flex-wrap" id='tagsButtons'></div>
+				<div class="w-7/12 flex justify-center">
 					<button class="bg-red-500 text-white py-2 px-4 rounded-full text-lg w-4/12" type="submit"
 					>Submit</button
 					>
@@ -132,7 +136,7 @@
 	<div class="bg-black text-white h-10 flex ps-3 pe-1 rounded-3xl items-center">
 		#
 		<p class="text-center"></p>
-		<button class=""><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+		<button class=""><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x pointer-events-none" viewBox="0 0 16 16">
 			<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
 		  </svg></button>
 	</div>

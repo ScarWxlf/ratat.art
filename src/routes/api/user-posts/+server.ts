@@ -6,12 +6,7 @@ export const GET: RequestHandler = async ({ request, locals }) => {
     const limit = url.searchParams.get('limit');
     const type = url.searchParams.get('type');
     const userId = url.searchParams.get('userId');
-    let canRequestMore = true;
-    
-    const count = await locals.dbconn.query("SELECT COUNT(*) FROM posts");
-    if(+limit! >= +count.rows[0].count){
-        canRequestMore = false;
-    }
+    const offset = url.searchParams.get('offset');
 
     let liked = [];
     if(locals.user){
@@ -20,11 +15,13 @@ export const GET: RequestHandler = async ({ request, locals }) => {
     }
 
     if(type === 'liked'){
-        const result = await locals.dbconn.query(`SELECT * FROM posts WHERE id IN (SELECT post_id FROM likes WHERE user_id = $1) LIMIT ${limit}`, [userId]);
-        return json({ success: true, images: result.rows, canRequestMore: canRequestMore, likedPosts: liked});
+
+        const result = await locals.dbconn.query(`SELECT * FROM posts WHERE id IN (SELECT post_id FROM likes WHERE user_id = $1) LIMIT ${limit} OFFSET ${offset}`, [userId]);
+        return json({ success: true, images: result.rows, likedPosts: liked});
     }else{
-        const result = await locals.dbconn.query(`SELECT * FROM posts WHERE userId = $1 LIMIT ${limit}`, [userId]);
-        return json({ success: true, images: result.rows, canRequestMore: canRequestMore, likedPosts: liked});
+        const result = await locals.dbconn.query(`SELECT * FROM posts WHERE userId = $1 LIMIT ${limit} OFFSET ${offset}`, [userId]);
+
+        return json({ success: true, images: result.rows,  likedPosts: liked});
     }
     // const result = await locals.dbconn.query(`SELECT * FROM posts LIMIT ${limit}`);
     // return json({ success: true, images: result.rows, canRequestMore: canRequestMore});

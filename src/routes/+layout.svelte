@@ -42,19 +42,19 @@
 				</li>
 				{#if data.auth}
 					<li>
-						<a href="/user/{data?.username}">profile</a>
+						<a href="/user/{data?.username}">Profile</a>
 					</li>
 					<li>
 						<form method="POST" action="/api/sign-out">
-							<button type="submit">sign out</button>
+							<button type="submit">Sign out</button>
 						</form>
 					</li>
 				{:else}
 					<li>
-						<a href="/sign-in">sign in</a>
+						<a href="/sign-in">Sign in</a>
 					</li>
 					<li>
-						<a href="/sign-up">sign up</a>
+						<a href="/sign-up">Sign up</a>
 					</li>
 				{/if}
 			</ul>

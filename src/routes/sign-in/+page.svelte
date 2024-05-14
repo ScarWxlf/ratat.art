@@ -33,6 +33,7 @@
 				};
 			}}
 		>
+			<h1 class="text-3xl font-bold mb-2">Welcome back</h1>
 			<div class="relative h-10 w-full min-w-[200px]">
 				<input
 					class="peer h-full w-full rounded-[7px] border border-gray-400 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-gray-400 focus:border-2 focus:border-stone-950 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
@@ -70,8 +71,8 @@
 
 			<div class="flex flex-row-reverse w-full">
 				<button
-					class="border border-gray-500 rounded-lg px-1 pb-1 duration-300 hover:bg-gray-300 hover:text-white hover:outline-2"
-					type="submit">sign in</button
+					class="border w-full border-gray-500 rounded-lg py-1 px-1 pb-1 duration-300 hover:bg-gray-200 hover:outline-2"
+					type="submit">Sign in</button
 				>
 			</div>
 		</form>

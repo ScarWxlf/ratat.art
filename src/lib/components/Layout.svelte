@@ -4,16 +4,11 @@
 	import { onMount } from 'svelte';
     export let getPosts;
 
-	export let images = [];
+	let images = [] as { key: number; id: number; image: string }[]
+	export let likedPosts = [] as number[];
 	let canRequestMore = true;
-	let likedPosts = [];
 	onMount(async () => {
-		const result = await getPosts();
-		images = result.images.map((image) => ({ key: image.id, ...image }))
-		console.log(images)
-        canRequestMore = result.canRequestMore;
-		likedPosts = result.likedPosts;
-
+		images = await getPosts();
 	});
 
 	let innerWidth = 0;
@@ -28,7 +23,6 @@
 	<title>ratat.art</title>
 	<meta name="description" content="ratat.art" />
 </svelte:head>
-
 <div class="w-full flex justify-center">
 	<div class="container">
 		<MasonryInfiniteGrid
@@ -42,10 +36,9 @@
 				if (!canRequestMore) return;
 				e.wait();
 				setTimeout(async () => {
-					const result = await getPosts();
-					canRequestMore = result.canRequestMore;
-					console.log(result.images);
-					images = result.images.map((image) => ({ key: image.id, ...image }))
+					const newImages = await getPosts();
+					if(newImages.length === 0) canRequestMore = false;
+					images = [...images, ...newImages];
 					e.ready();
 				}, 1000);
 			}}
@@ -53,20 +46,19 @@
 		>
 			{#each visibleItems as item (item.key)}
 				<div class="group" style={isMobile ? `width: ${innerWidth / 2 - 12}px;` : 'width: 236px;'}>
-					<!-- <a href="post/{item.data.id}"> -->
+					<a href="/post/{item.data.id}">
 					<div
 						class="absolute text-white transition-all duration-200 invisible opacity-0 group-hover:visible group-hover:opacity-100 flex justify-end flex-col w-full h-full"
 					>
 						<div class="w-full h-full bg-opacity-20 bg-black p-2 rounded-2xl">
 							<div class="flex flex-row gap-2 text-2xl mt-1 me-1">
 								<div class="flex-grow" />
-								<a href="/post/{item.data.id}" class="bg-black px-2 py-2 rounded-2xl">beb</a>
 								<LikeButton isLiked={likedPosts.includes(item.data.id)} postId={item.data.id} />
 							</div>
 						</div>
 					</div>
 					<img class="w-full rounded-2xl" src={item.data.image} alt="egjs" />
-					<!-- </a> -->
+					</a>
 				</div>
 			{/each}
 		</MasonryInfiniteGrid>

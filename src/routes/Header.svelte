@@ -25,13 +25,13 @@
 </script>
 
 <div
-	class="fixed w-full bg-white dark:bg-slate-900 dark:text-white z-50 h-11 border-b border-gray-300"
+	class="fixed w-full bg-white dark:bg-slate-900 dark:text-white z-50 h-11"
 >
-	<header class="flex flex-row p-2">
-		<a href="/">🐁 ratat.art</a>
+	<header class="flex flex-row items-center p-2">
+		<a href="/">🐁 Ratat.art</a>
 		<a href="/create-post" class="ms-3 px-2 rounded-2xl">Create</a>
 
-		<div class="flex mx-8 flex-grow form relative justify-center">
+		<div class="flex mx-8 flex-grow form relative justify-center  dark:bg-slate-900 dark:text-white">
 			<button>
 				<svg
 					width="17"
@@ -51,12 +51,12 @@
 				</svg>
 			</button>
 			<input
+				class="input"
 				bind:value={searchValue}
 				on:input={handleSearch}
 				on:click={() => {
 					isSearchOpen = true;
 				}}
-				class="input"
 				placeholder="Type your text"
 				type="text"
 			/>
@@ -148,7 +148,6 @@
 		align-items: center;
 		border-radius: var(--border-radius);
 		transition: border-radius 0.5s ease;
-		background: var(--input-bg, #fff);
 		border: 2px solid transparent;
 		border-color: rgb(153, 153, 153);
 		transition: border-color var(--timing) ease, border-radius 0.5s ease;

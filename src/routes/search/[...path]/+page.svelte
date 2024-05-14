@@ -6,15 +6,18 @@
     const user = data?.user;
 
 
-    let posts = [];
+	let images = [];
     let limit = 2;
+    let offset = 0;
+    let likedPosts = [] as number[];
 	async function getTagsPosts(){
-        const res = await fetch(`/api/tag?tag=${$page.params.path}&limit=${limit}&userId=${user.userId}`);
+        const res = await fetch(`/api/tag?tag=${$page.params.path}&limit=${limit}&offset=${offset}`);
 		const data = await res.json();
-        limit += 2;
-        return data;
+        offset += 2;
+        likedPosts = data.likedPosts;
+        return data.images.map((image: object) => ({ key: image.id, ...image }))
     }
 
 </script>
 
-<Layout getPosts={getTagsPosts}/>
+<Layout likedPosts={likedPosts} getPosts={getTagsPosts}/>

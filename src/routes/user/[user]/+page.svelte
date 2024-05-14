@@ -8,19 +8,21 @@
 	let isSubscribed: boolean;
 	isSubscribed = data?.isSubscribed;
 	const user = data?.user;
-	let userPage;
-	$: userPage = data?.userPage;
+	let userPage = data?.userPage;
 
 	let postsType = 'liked';
 	let limit = 2;
+	let offset = 0;
+	let likedPosts = [] as number[];
 
-	const getUserPosts = async () => {
+	async function getUserPosts(){
 		const res = await fetch(
-			`/api/user-posts?userId=${userPage.userId}&limit=${limit}&type=${postsType}`
+			`/api/user-posts?userId=${userPage.userId}&limit=${limit}&type=${postsType}&offset=${offset}`
 		);
-		const data = await res.json();
-		limit += 2;
-		return data;
+		const resData = await res.json();
+		offset += 2;
+		likedPosts = resData.likedPosts;
+		return resData.images.map((image) => ({ key: image.id, ...image }))
 	};
 	let items = [];
 </script>
@@ -59,6 +61,7 @@
 				class="py-1 px-2 hover:bg-gray-300 rounded-lg"
 				on:click={(e) => {
 					postsType = 'created';
+					offset = 0;
 				}}
 			>
 				Created
@@ -70,6 +73,7 @@
 				class="py-1 px-2 hover:bg-gray-300 rounded-lg"
 				on:click={(e) => {
 					postsType = 'liked';
+					offset = 0;
 				}}
 			>
 				Liked
@@ -83,12 +87,12 @@
 				<!-- {#if items.length === 0}
 					<div class="flex justify-center w-full">{userPage.username} hasn't no post yet, but there's tons of potential </div>
 				{/if} -->
-				<Layout bind:images={items} getPosts={getUserPosts} />
+				<Layout likedPosts={likedPosts} getPosts={getUserPosts} />
 			{:else}
 				<!-- {#if items.length === 0}
 					<div class="flex justify-center w-full">{userPage.username} hasn't saved any posts yet</div>
 				{/if} -->
-				<Layout bind:images={items} getPosts={getUserPosts} />
+				<Layout likedPosts={likedPosts} getPosts={getUserPosts} />
 			{/if}
 		{/key}
 	</div>

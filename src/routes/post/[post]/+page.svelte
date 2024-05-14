@@ -5,7 +5,7 @@
 	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { goto, invalidate, invalidateAll } from '$app/navigation';
+	import { goto} from '$app/navigation';
 
 	export let data: PageData;
 	const user = data?.user;
@@ -20,22 +20,8 @@
 	isSubscribed = data?.isSubscribed;
 	let commentButtonDisabled = true;
 
-	// let pageId = postDB.id;
-
-	// $: {
-	// 	if(pageId !== $page.params.post){
-	// 		pageId = $page.params.post;
-	// 		invalidateAll();
-	// 	}
-	// }
-
-	// let imageHeight;
-	// if (typeof window !== 'undefined') {
-	// 	let imageStyle = window.getComputedStyle(document.getElementById('image')!);
-	// 	imageHeight = imageStyle.height;
-	// }
-
 	let visDrop = false;
+	let maxHeigh = 330;
 
 	const handleClickOutside = (event) => {
 		const dropdown = document.getElementById('dropdown');
@@ -45,6 +31,13 @@
 	};
 
 	onMount(() => {
+		maxHeigh = document.getElementById('image').offsetHeight;
+		let commentsHeight = document.getElementById('comments');
+		if(commentsHeight.offsetHeight > maxHeigh)
+		{
+			commentsHeight.style.height = `${maxHeigh}px`;
+		}
+
 		document.addEventListener('click', handleClickOutside);
 		return () => {
 			document.removeEventListener('click', handleClickOutside);
@@ -64,7 +57,8 @@
 				alt="post"
 			/>
 		</div>
-		<div class="flex flex-col w-6/12 relative">
+		<div class="flex flex-col h-full w-6/12 relative">
+			 <!-- h-full mb ne nado  -->
 			
 				<div class="flex justify-between items-center py-3 h-24 px-7">
 					<div class="flex items-center gap-4">
@@ -103,7 +97,7 @@
 									{#if data.auth && user.userId === postOwner.userId}
 										<li>
 											<button
-												class="w-full px-4 py-2 rounded-md hover:bg-gray-300"
+												class="w-full px-4 py-2 rounded-md dark:text-black hover:bg-gray-300"
 												on:click={() => {
 													showModal = true;
 												}}
@@ -112,7 +106,7 @@
 											</button>
 										</li>
 									{/if}
-									<li class="px-4 py-2 rounded-md hover:bg-gray-300">
+									<li class="px-4 py-2 rounded-md hover:bg-gray-300 dark:text-black">
 										<a href={postDB.image} download>Download</a>
 									</li>
 								</ul>
@@ -196,7 +190,6 @@
 													type="button"
 													class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
 													on:click={async () => {
-														// const confirmed = confirm('Are you sure you want to delete this post?');
 															await fetch(`/api/delete-post?id=${postDB.id}`, {
 																method: 'DELETE'
 															}).then((res) => {
@@ -222,12 +215,12 @@
 					</div>
 					<LikeButton {isLiked} postId={postDB.id} />
 				</div>
-				<div class="overflow-y-auto flex-grow max-h-[585px]">
+				<div class="overflow-y-auto flex-grow min-h-[330px]" id='comments'>
 					<div class="px-7">
 						<h1 class="text-3xl">{postDB.title}</h1>
 						<ul class="flex gap-2 mt-2">
 							{#each postDB.tags as tag}
-								<li><a href="/search/{tag}">#{tag}</a></li>
+								<li><a class="text-blue-500" href="/search/{tag}">#{tag}</a></li>
 							{/each}
 						</ul>
 						<p class="text-xl mt-2">{postDB.description}</p>
@@ -267,7 +260,7 @@
 							{/if}
 						</div>
 					</div>
-					<div class="flex flex-col px-7">
+					<div class="flex flex-col px-7 mb-2">
 						<p class="text-xl">Comments</p>
 						{#if comments.length === 0}
 							<p class="w-full mt-1">No comments yet! Add one to start the conversation.</p>
@@ -301,16 +294,16 @@
 				<div
 					class="flex items-center bottom-0 rounded-br-2xl w-full px-4 gap-2 border-t h-20 border-gray-400"
 				>
-					<div class="flex w-full gap-2">
+					<div class="flex w-full items-center gap-2">
 						{#if data.auth}
 							<img
-								class="h-16 w-16 rounded-full object-cover"
+								class="h-14 w-14 rounded-full object-cover"
 								src={currentUserImage}
 								alt="profile"
 							/>
 							<form class="flex w-full items-center gap-2" method="POST" action="?/comment">
 								<input
-									class="rounded-full w-full bg-violet-100 text-xl border border-gray-500 p-4 placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+									class="rounded-full h-12 w-full bg-violet-100 text-xl border border-gray-500 p-4 dark:text-black placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
 									placeholder="Enter comment"
 									name="comment"
 									on:input={(event) => {
@@ -318,13 +311,13 @@
 									}}
 								/>
 								<button
-									class="bg-red-500 rounded-full p-3 text-2xl disabled:bg-gray-400 disabled:cursor-not-allowed"
+									class="bg-red-500 rounded-full p-2 flex text-2xl disabled:bg-gray-400 disabled:cursor-not-allowed"
 									type="submit"
 									disabled={commentButtonDisabled}
 									><svg
 										xmlns="http://www.w3.org/2000/svg"
-										width="32"
-										height="32"
+										width="26"
+										height="26"
 										fill="currentColor"
 										class="bi bi-send"
 										viewBox="0 0 16 16"
@@ -338,8 +331,8 @@
 						{:else}
 							<div class="flex w-full justify-center">
 								<a href="/sign-in">
-									<button class="bg-green-500 rounded-3xl py-2 px-4 text-2xl"
-										>Login to comment</button
+									<button class="rounded-2xl py-2 px-4 text-2xl border-b shadow-xl border-gray-400"
+										>Login</button
 									>
 								</a>
 							</div>
@@ -349,6 +342,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-</style>
