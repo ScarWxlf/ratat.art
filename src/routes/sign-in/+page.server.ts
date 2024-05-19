@@ -59,7 +59,7 @@ export const actions: Actions = {
 		}
 
 		if (valid) {
-			const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '1h' });
+			const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '24h' });
 			cookies.set('auth', token, { httpOnly: true });
 			throw redirect(302, '/');
 		}
