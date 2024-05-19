@@ -2,19 +2,26 @@
 	import LikeButton from '$lib/components/Like-Button.svelte';
 	import { MasonryInfiniteGrid } from '@egjs/svelte-infinitegrid';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import enotic from '$lib/enotic.gif'
     export let getPosts;
 
+	let loading = true;
 	let images = [] as { key: number; id: number; image: string }[]
+	let isData = [' ']
 	export let likedPosts = [] as number[];
 	let canRequestMore = true;
 	onMount(async () => {
 		images = await getPosts();
+		//@ts-ignore
+		isData = images;
 	});
 
 	let innerWidth = 0;
 	let innerHeight = 0;
 	$: column = Math.floor(innerWidth / 236);
 	$: isMobile = innerWidth > 0 && innerWidth < 600;
+	$: isData.length === 0 && (loading = false);
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -23,8 +30,11 @@
 	<title>ratat.art</title>
 	<meta name="description" content="ratat.art" />
 </svelte:head>
-<div class="w-full flex justify-center">
+<div class="w-full flex justify-center mb-2">
 	<div class="container">
+		{#if isData.length === 0}
+			<slot/>
+		{:else}
 		<MasonryInfiniteGrid
 			class="w-full"
 			columnCalculationThreshold={2}
@@ -36,11 +46,13 @@
 				if (!canRequestMore) return;
 				e.wait();
 				setTimeout(async () => {
+					loading =false;
 					const newImages = await getPosts();
 					if(newImages.length === 0) canRequestMore = false;
 					images = [...images, ...newImages];
 					e.ready();
 				}, 1000);
+				loading = true;
 			}}
 			let:visibleItems
 		>
@@ -62,5 +74,11 @@
 				</div>
 			{/each}
 		</MasonryInfiniteGrid>
+		{/if}
+		{#if loading}
+			<div transition:fade class="w-full h-16 flex justify-center mt-1">
+				<img class="rounded-full" src={enotic} alt="loading" />
+			</div>
+		{/if}
 	</div>
 </div>

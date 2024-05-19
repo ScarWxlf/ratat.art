@@ -2,11 +2,11 @@
 	import { dark } from '$lib/dark';
 
 	let isSearchOpen = false;
-	let searchItems = [];
+	let searchItems = [] as any; //?
 	let searchValue = '';
 	let allTags = new Set();
 
-	const handleSearch = async (e) => {
+	const handleSearch = async (e: any) => {
 		searchValue = e.target.value;
 		if (e.target.value === '') {
 			searchItems = [];
@@ -90,24 +90,30 @@
 		tabindex="0"
 		on:keydown={() => {}}
 	>
-		<div class="w-3/4 h-auto bg-white rounded-b-2xl overflow-y-auto">
+		<div class="w-3/4 h-auto bg-white dark:bg-gray-900 rounded-b-2xl overflow-y-auto">
 			{#if searchItems && searchItems.length > 0}
 				{#each searchItems as item, index}
 					{#if index < 10}
 						{#if item.type === 'name'}
-						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300" href={`/post/${item.id}`}>
+						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300 dark:hover:text-black" href={`/post/${item.id}`} on:click={()=>{
+							searchValue = item.title;
+						}}>
 							<div class="flex items-center ms-3 gap-2">
 								🔍 {item.title}
 							</div>
 						</a>
 						{:else if item.type === 'tag'}
-						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300" href={`/search/${item.tag}`}>
+						<a class="flex items-center w-full h-12 ps-3 hover:bg-gray-300 dark:hover:text-black" href={`/search/${item.tag}`} on:click={()=>{
+							searchValue = item.tag;
+						}}>
 							<div class="flex items-center ms-3 gap-2">
 									🔍 #{item.tag}
 								</div>
 							</a>  
 						{:else if item.type === 'user'}
-						<a class="flex items-center w-full h-16 ps-3 hover:bg-gray-300" href={`/user/${item.username}`}>
+						<a class="flex items-center w-full h-16 ps-3 hover:bg-gray-300 dark:hover:text-black" href={`/user/${item.username}`} on:click={()=>{
+							searchValue = item.username;
+						}}>
 							<div class="flex items-center ms-3 gap-2">
 									<img
 										class="h-14 w-14 rounded-full object-cover"

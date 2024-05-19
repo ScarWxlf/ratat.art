@@ -41,6 +41,7 @@ export const actions = {
 			// 				'UPDATE users SET password = $1 WHERE id = $2',
 			// 				[hash, userId]
 			// 			);
+			//          return {succesPassword: true}
 			// 		} catch (error) {
 			// 			console.log(error);
 			// 		}
@@ -56,6 +57,7 @@ export const actions = {
 		const data = await request.formData();
 		let { userId } = locals.user;
 		const email = data.get('email');
+		//add validation for email
 		if (email === locals.user.email) return fail(400, { message: 'Emails are the same' });
 		try {
 			const result = await locals.dbconn.query(
@@ -63,6 +65,7 @@ export const actions = {
 				[email, userId]
 			);
 			locals.user.email = result.rows[0].email;
+			return {successEmail: true}
 		} catch (error) {
 			console.log(error);
 		}

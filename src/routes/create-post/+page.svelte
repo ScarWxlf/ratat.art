@@ -1,4 +1,6 @@
 <script lang="ts">
+	export let form;
+
 	let loading = true;
 	let image;
 	const loadFile = function (event: any) {
@@ -50,7 +52,7 @@
 		enctype="multipart/form-data"
 		action="?/create-post"
 	>
-		<div class="w-6/12 flex justify-center items-center max-h-[500px] max-w-[500px] mt-4 ms-2">
+		<div class="w-6/12 flex flex-col justify-center items-center max-h-[500px] max-w-[500px] mt-4 ms-2">
 			<div
 				class="flex justify-center items-center bg-gray-200 h-[450px] w-7/12 rounded-2xl relative {loading
 					? ''
@@ -90,8 +92,14 @@
 				id="output"
 				alt="preview"
 			/>
+			{#if form?.imageMessage}
+				<p class=" text-red-500">{form?.imageMessage}</p>
+			{/if}
 		</div>
 		<div class="w-6/12">
+			{#if form?.succes}
+				<p class="text-green-500 text-3xl">Post created ura</p>
+			{/if}
 			<div class="flex flex-col gap-4 w-full mt-6">
 				<div class="px-3 w-7/12">
 					<p class="text-lg">Title</p>
@@ -100,6 +108,9 @@
 						placeholder="Add a title"
 						name="title"
 					/>
+					{#if form?.titleMessage}
+						<p class=" text-red-500">{form?.titleMessage}</p>
+					{/if}
 				</div>
 				<div class="px-3 w-7/12">
 					<p class="text-lg">Description</p>

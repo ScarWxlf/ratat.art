@@ -7,17 +7,21 @@
 
 
 	let images = [];
-    let limit = 2;
+    let limit = 5;
     let offset = 0;
     let likedPosts = [] as number[];
 	async function getTagsPosts(){
         const res = await fetch(`/api/tag?tag=${$page.params.path}&limit=${limit}&offset=${offset}`);
 		const data = await res.json();
-        offset += 2;
+        offset += 5;
         likedPosts = data.likedPosts;
         return data.images.map((image: object) => ({ key: image.id, ...image }))
     }
 
 </script>
 
-<Layout likedPosts={likedPosts} getPosts={getTagsPosts}/>
+<Layout likedPosts={likedPosts} getPosts={getTagsPosts}>
+    <div class="flex justify-center w-full">
+        No posts with tag {$page.params.path}
+    </div>
+</Layout>

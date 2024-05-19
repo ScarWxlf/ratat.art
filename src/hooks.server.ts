@@ -19,7 +19,8 @@ export const handle = async ({ event, resolve }) => {
                 userId: result.rows[0].id,
                 username: result.rows[0].username,
                 email: result.rows[0].email,
-				image: result.rows[0].image
+				image: result.rows[0].image,
+				tags: result.rows[0].tags
             }
 
 		} catch (err) {

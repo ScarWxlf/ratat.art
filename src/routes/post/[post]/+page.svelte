@@ -4,8 +4,8 @@
 	import type { PageData } from './$types';
 	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import { goto} from '$app/navigation';
+	import Layout from '$lib/components/Layout.svelte';
 
 	export let data: PageData;
 	const user = data?.user;
@@ -45,10 +45,22 @@
 	});
 
 	let showModal = false;
+	// console.log(postDB.tags);
+
+	let limit = 5;
+    let offset = 0;
+    let likedPosts = [] as number[];
+	async function getSimilarPosts(){
+        const res = await fetch(`/api/similar-posts?tags=${postDB.tags}&limit=${limit}&offset=${offset}&postId=${postDB.id}`);
+		const data = await res.json();
+        offset += 5;
+        likedPosts = data.likedPosts;
+        return data.images.map((image: object) => ({ key: image.id, ...image }))
+    }
 </script>
 
-<div class="flex w-full justify-center mt-1 mb-10">
-	<div class="flex w-8/12 rounded-2xl shadow-gray-700 shadow-2xl">
+<div class="flex flex-col w-full items-center mt-1 mb-1">
+	<div class="flex w-8/12 rounded-2xl shadow-gray-500 shadow-xl">
 		<div class="flex h-full items-center w-6/12">
 			<img
 				class=" rounded-tl-2xl rounded-bl-2xl w-full object-cover"
@@ -301,7 +313,7 @@
 								src={currentUserImage}
 								alt="profile"
 							/>
-							<form class="flex w-full items-center gap-2" method="POST" action="?/comment">
+							<form class="flex flex-grow items-center gap-2" method="POST" action="?/comment">
 								<input
 									class="rounded-full h-12 w-full bg-violet-100 text-xl border border-gray-500 p-4 dark:text-black placeholder-gray-400 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
 									placeholder="Enter comment"
@@ -341,4 +353,10 @@
 				</div>
 		</div>
 	</div>
+	<h1 class="text-3xl mt-6 mb-4">More to explore</h1>
+	<Layout likedPosts={likedPosts} getPosts={getSimilarPosts}>
+		<div class="flex justify-center w-full">
+			No similar posts found
+		</div>
+	</Layout>
 </div>

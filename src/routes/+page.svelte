@@ -29,7 +29,7 @@
 	<meta name="description" content="ratat.art" />
 </svelte:head>
 
-<div class="w-full flex justify-center">
+<div class="w-full flex justify-center mb-2">
 	<div class="container">
 		<MasonryInfiniteGrid
 			class="w-full"

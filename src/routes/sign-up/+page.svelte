@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { env } from '$env/dynamic/public';
+	import type { PageLoad} from './$types';
 
 	const SITE_KEY = env.PUBLIC_RECAPTCHA_SITE_KEY;
 
-	export let form;
+	export let form: PageLoad;
 </script>
 
 <svelte:head>

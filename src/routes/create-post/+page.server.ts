@@ -1,5 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { writeFile } from 'node:fs/promises';
 import { extname } from 'path';
 
@@ -17,8 +18,18 @@ export const actions: Actions = {
 		const decsription = data.get('description');
 		const stringTags = data.get('hiddenTags') as string;
 		const userId = locals.user.userId;
-		const tags = stringTags.split(',');
+		
+		let tags = stringTags.split(',');
+		if(stringTags === '')
+			tags = [];
 
+		if(picture.size === 0)
+		{
+			return fail(400, {imageMessage: 'image is requred'})
+		}
+		if(title === ''){
+			return fail(400, {titleMessage: 'title is requred'})
+		}
 		try {
 			const result = await locals.dbconn.query('SELECT id FROM posts ORDER BY id DESC LIMIT 1');
 			let postId;

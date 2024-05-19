@@ -2,20 +2,19 @@ import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import type { PageServerLoad, Actions } from './$types';
 
-/** @type {import('./$types').LayoutServerLoad} */
-export function load({ cookies }) {
+export const load: PageServerLoad = ({ cookies }) => {
 	if (cookies.get('auth')) {
 		throw redirect(302, '/');
 	}
 }
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
 	'sign-in': async ({ request, cookies, locals }) => {
 		const data = await request.formData();
 		const email = data.get('email');
-		const password = data.get('password');
+		const password = data.get('password') as string;
 		const captcha = data.get('g-recaptcha-response');
 		const SECRET_KEY = env.JWT_SECRET_KEY;
 
@@ -26,7 +25,7 @@ export const actions = {
 					email: !email,
 					password: !password
 				},
-				message: 'Wrong form'
+				// message: 'Wrong form'
 			});
 		}
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let data;
+	export let form;
 	let src = data.user.image;
 	const loadFile = function (event: any) {
 		var reader = new FileReader();
@@ -19,13 +20,13 @@
 		</p>
 		<div class="flex gap-5 items-end mt-3">
 			<img class="h-36 w-36 rounded-full object-cover" src={src} alt="profile" />
-			<form class='w-1/2' method="POST" enctype="multipart/form-data" action="?/public_profile_picture">
+			<form class='w-1/2 flex flex-col' method="POST" enctype="multipart/form-data" action="?/public_profile_picture">
 				<div class="grid w-1/2 max-w-xs items-center gap-1.5">
 					<label
-						class="text-center rounded-2xl p-2 text-sm border border-black font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						class="text-center cursor-pointer rounded-2xl p-2 text-sm border border-black dark:border-white font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 						>Upload picture
 						<input
-							class="hidden w-full rounded-md border border-black border-input bg-white text-sm text-gray-400 file:border-0 file:bg-black file:text-white file:text-sm file:font-medium"
+							class="hidden"
 							type="file"
 							name="picture"
 							id="picture"
@@ -33,7 +34,12 @@
 						/>
 					</label>
 				</div>
-				<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-4/12" type="submit">Save</button>
+				<div class="mt-2 relative">
+					<button class="ms-2 py-1 px-4 rounded-full bg-gray-300 w-4/12 dark:text-black" type="submit">Save</button>
+					{#if form?.success}
+						<p class="text-green-500 absolute">changes saved</p>
+					{/if}
+				</div>
 			</form>
 		</div>
 		<form class='flex flex-col' method="POST" action="?/public_profile">
@@ -44,7 +50,10 @@
 				name="username"
 				value={data?.user?.username ? data.user.username : ''}
 			/>
-			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2" type="submit">Submit</button>
+			{#if form?.successUsername}
+					<p class="text-green-500">changes saved</p>
+				{/if}
+			<button class="mt-2 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>
 	</div>
 </div>

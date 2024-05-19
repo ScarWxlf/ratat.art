@@ -1,13 +1,13 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { writeFile } from 'node:fs/promises';
 import { extname } from 'path';
+import type {Actions, PageServerLoad} from './$types'
 
-export function load({ locals }) {
+export const load: PageServerLoad = ({ locals }) => {
 	return{user: locals.user}
 }
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
 	public_profile: async ({ request, cookies, locals }) => {
 		const data = await request.formData();
 		const username = data.get('username');
@@ -20,6 +20,7 @@ export const actions = {
 			const {userId} = locals.user;
             const result = await locals.dbconn.query("UPDATE users SET username = $1 WHERE id = $2 RETURNING username", [username, userId]);
 			locals.user.username = result.rows[0].username;
+			return {successUsername: true}
 		} catch (error) {
 			cookies.delete('auth', {
 				path: '/'

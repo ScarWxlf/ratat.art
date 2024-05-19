@@ -21,7 +21,10 @@
 			{#if form?.message}
 				<p class="text-red-400">{form.message}</p>
 			{/if}
-			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2" type="submit">Submit</button>
+			{#if form?.successEmail}
+				<p class="text-green-500">Email changed success</p>
+			{/if}
+			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>
 		<form class="flex flex-col" method="POST" action="?/personal_profile">
             <!-- <Input name='email' label='Email' value={data?.user?.email}/> -->
@@ -40,7 +43,10 @@
 			{#if form?.messagePassword}
 				<p class="text-red-400">{form.messagePassword}</p>
 			{/if}
-            <button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2" type="submit">Submit</button>
+			{#if form?.succesPassword}
+				<p class="text-green-500">Password changed success</p>
+			{/if}
+            <button class="mt-2 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>
 	</div>
 </div>
