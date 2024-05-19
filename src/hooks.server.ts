@@ -1,13 +1,12 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken';
-import { connectToDB } from '$lib/db'; // Убедитесь, что путь к модулю db корректен
+import { connectToDB } from '$lib/db';
 import { env } from '$env/dynamic/private';
+import type { Handle } from '@sveltejs/kit';
 
-export const handle = async ({ event, resolve }) => {
-	// Подключение к базе данных
+export const handle: Handle = async ({ event, resolve }) => {
 	const dbconn = await connectToDB();
-	event.locals.dbconn = dbconn; // Сохраняем подключение к БД в locals для доступа в других частях приложения
+	event.locals.dbconn = dbconn; 
 
-	// Обработка JWT токенов
 	const token = event.cookies.get('auth');
 
 	if (token) {

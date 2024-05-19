@@ -1,4 +1,4 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -26,6 +26,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     }
 
     const commentsResult = await locals.dbconn.query("SELECT * FROM comments WHERE post_id = $1 ORDER BY user_id", [post]);
+    // @ts-expect-error beb
     const userIds = commentsResult.rows.map((comment) => comment.user_id);
     const commentsOwners = await locals.dbconn.query("SELECT username, id, image FROM users WHERE id = ANY($1) ORDER BY id", [userIds]);
     return {

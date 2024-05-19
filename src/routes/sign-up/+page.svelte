@@ -103,14 +103,14 @@
 					</p>{/if}
 			</div>
 
-			{#if form?.message}<p class="text-red-400">{form.message}</p>{/if}
-
+			
 			<div class="flex flex-row-reverse w-full">
 				<button
-					class="border w-full py-1 border-gray-500 rounded-lg px-1 pb-1 duration-300 hover:bg-gray-200 hover:outline-2"
-					type="submit">Sign up</button
+				class="border w-full py-1 border-gray-500 rounded-lg px-1 pb-1 duration-300 hover:bg-gray-200 hover:outline-2"
+				type="submit">Sign up</button
 				>
 			</div>
 		</form>
+		{#if form?.message}<p class="text-red-400 mt-2">{form.message}</p>{/if}
 	</div>
 </div>

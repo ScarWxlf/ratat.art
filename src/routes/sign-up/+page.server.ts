@@ -21,6 +21,7 @@ export const actions: Actions = {
 
 		if ([username, email, password, password2].some((e) => !e)) {
 			return fail(400, {
+				username,
 				email,
 				missing: {
 					username: !username,
@@ -34,6 +35,7 @@ export const actions: Actions = {
 
 		if (!submitCaptcha(captcha!.toString())) {
 			return fail(401, {
+				username,
 				email,
 				missing: {
 					username: !username,
@@ -47,14 +49,30 @@ export const actions: Actions = {
 
 		if(password !== password2){
 			return fail(401, {
+				username,
 				email,
 				missing: {},
 				message: 'Passwords must be the same'
 			})
 		}
 
-		const saltRounds = 2;
+		const regex = /^(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/;
+        const validatePassword = regex.test(password);
+		if (!validatePassword) {
+			return fail(400, {
+				username,
+				email,
+				missing: {
+					username: !username,
+					email: !email,
+					password: !password,
+					password2: !password2
+				},
+				message: 'Password must contain at least 6 characters and one number'
+			});
+		}
 
+		const saltRounds = 2;
 		bcrypt.hash(password, saltRounds, async (err, hash) => {
 			if (err) {
 			  console.error("Error hashing password:", err);

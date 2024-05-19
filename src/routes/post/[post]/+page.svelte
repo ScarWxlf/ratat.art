@@ -1,5 +1,4 @@
 <script lang="ts">
-	import src from '$lib/images/saved.jpg';
 	import LikeButton from '$lib/components/Like-Button.svelte';
 	import type { PageData } from './$types';
 	import { handleSubscribe, handleUnSubscribe } from '$lib/components/subFunctions';
@@ -23,7 +22,7 @@
 	let visDrop = false;
 	let maxHeigh = 330;
 
-	const handleClickOutside = (event) => {
+	const handleClickOutside = (event: any) => {
 		const dropdown = document.getElementById('dropdown');
 		if (dropdown && !dropdown.contains(event.target)) {
 			visDrop = false;
@@ -31,9 +30,11 @@
 	};
 
 	onMount(() => {
+		// @ts-expect-error beb
 		maxHeigh = document.getElementById('image').offsetHeight;
-		let commentsHeight = document.getElementById('comments');
-		if(commentsHeight.offsetHeight > maxHeigh)
+		let commentsHeight = document.getElementById('comments') as HTMLElement;
+		let height = commentsHeight.offsetHeight;
+		if(height > maxHeigh)
 		{
 			commentsHeight.style.height = `${maxHeigh}px`;
 		}
@@ -45,8 +46,6 @@
 	});
 
 	let showModal = false;
-	// console.log(postDB.tags);
-
 	let limit = 5;
     let offset = 0;
     let likedPosts = [] as number[];
@@ -55,7 +54,7 @@
 		const data = await res.json();
         offset += 5;
         likedPosts = data.likedPosts;
-        return data.images.map((image: object) => ({ key: image.id, ...image }))
+        return data.images.map((image: any) => ({ key: image.id, ...image }))
     }
 </script>
 
@@ -253,9 +252,6 @@
 						</a>
 						<div>
 							{#if data.auth && user.userId !== postOwner.userId && !isSubscribed}
-								<!-- <form method="POST" action="/api/subscribe">
-								<button class="text-white mt-2 bg-green-500 py-2 px-4 rounded-3xl">Subscribe</button>
-							</form> -->
 								<button
 									on:click={async () => {
 										isSubscribed = await handleSubscribe(postOwner.userId);

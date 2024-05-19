@@ -4,21 +4,19 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async ({ request, locals }) => {
     const url = new URL(request.url);
     const limit = url.searchParams.get('limit');
-    let canRequestMore = true;
-    const count = await locals.dbconn.query("SELECT COUNT(*) FROM posts");
-    let blacklistTags = [];
+    const offset = url.searchParams.get('offset');
+    const userId = locals.user ? locals.user.userId : null;
+    let blacklistTags = [] as string[];
     if(locals.user){
         blacklistTags = locals.user.tags;
     }
-    if(+limit! >= +count.rows[0].count){
-        canRequestMore = false; 
+    let liked = [];
+    if(userId !== null){
+        const likedPosts = await locals.dbconn.query("SELECT * FROM likes WHERE user_id = $1", [userId]);
+        // @ts-expect-error beb
+        liked = likedPosts.rows.map((post) => post.post_id);
     }
-    // if(limit! >= locals.postCout){
-    //     console.log('aaaa')
-    //     const result = await locals.dbconn.query(`SELECT * FROM posts`);
-    //     return json({ success: true, images: result.rows, canRequestMore: false});
-    // }
-    // const tagsResult = await locals.dbconn.query("SELECT * FROM posts WHERE NOT (tags && $1)", [someTags]);
-    const result = await locals.dbconn.query(`SELECT * FROM posts WHERE NOT (tags && $1) LIMIT ${limit}`, [blacklistTags]);
-    return json({ success: true, images: result.rows, canRequestMore: canRequestMore});
+
+    const result = await locals.dbconn.query(`SELECT * FROM posts WHERE NOT (tags && $1) LIMIT ${limit} OFFSET ${offset}`, [blacklistTags]);
+    return json({ success: true, images: result.rows, likedPosts: liked});
 }

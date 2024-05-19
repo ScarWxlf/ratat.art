@@ -15,7 +15,7 @@
 		const data = await res.json();
         offset += 5;
         likedPosts = data.likedPosts;
-        return data.images.map((image: object) => ({ key: image.id, ...image }))
+        return data.images.map((image: any) => ({ key: image.id, ...image }))
     }
 
 </script>

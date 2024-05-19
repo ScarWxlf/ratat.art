@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let data;
 	export let form;
-	let src = data.user.image;
+	let src = data.user.image as any;
 	const loadFile = function (event: any) {
 		var reader = new FileReader();
 		reader.onload = function () {

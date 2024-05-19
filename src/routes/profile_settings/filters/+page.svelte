@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import type { ActionData } from './$types';
 
 	export let data;
-	export let form;
+	export let form: ActionData;
 
 	let tags = data.tags;
 	$: form?.tags && (tags = form.tags);
@@ -46,8 +46,8 @@
 				type="text"
 				name="tag"
 			/>
-			{#if form?.messagePassword}
-				<p class="text-red-400">{form.messagePassword}</p>
+			{#if form?.success}
+				<p class="text-green-500">Tag added success</p>
 			{/if}
 			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>

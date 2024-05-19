@@ -13,10 +13,11 @@ export const GET: RequestHandler = async ({ request, locals }) => {
 		const likedPosts = await locals.dbconn.query('SELECT * FROM likes WHERE user_id = $1', [
 			locals.user.userId
 		]);
+        // @ts-expect-error beb
 		liked = likedPosts.rows.map((post) => post.post_id);
 	}
 
-    let blacklistTags = [];
+    let blacklistTags = [] as string[];
     if(locals.user){
         blacklistTags = locals.user.tags;
     }

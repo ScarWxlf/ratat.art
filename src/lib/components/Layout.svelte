@@ -7,7 +7,7 @@
     export let getPosts;
 
 	let loading = true;
-	let images = [] as { key: number; id: number; image: string }[]
+	let images = [] as { key: number; id: number; image: string }[];
 	let isData = [' ']
 	export let likedPosts = [] as number[];
 	let canRequestMore = true;

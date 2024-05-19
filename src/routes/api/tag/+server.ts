@@ -7,7 +7,7 @@ export const GET: RequestHandler = async ({ request, locals }) => {
     const userId = locals.user ? locals.user.userId : null;
     const limit = url.searchParams.get('limit');
     const offset = url.searchParams.get('offset');
-    let blacklistTags = [];
+    let blacklistTags = [] as string[];
     if(locals.user){
         blacklistTags = locals.user.tags;
     }

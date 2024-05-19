@@ -1,7 +1,8 @@
-<script>
-    // import Input from '$lib/components/Input.svelte';
-    export let data;
-	export let form;
+<script lang='ts'>
+	import type { PageData, ActionData } from './$types';
+
+    export let data: PageData;
+	export let form: ActionData;
 </script>
 
 <div class="flex flex-col">
@@ -27,7 +28,6 @@
 			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>
 		<form class="flex flex-col" method="POST" action="?/personal_profile">
-            <!-- <Input name='email' label='Email' value={data?.user?.email}/> -->
 			<p class="text-2xl mt-3">Old password</p>
 			<input
 				class="mt-3 bg-white border-2 border-[#3e3e3e] rounded-lg text-black w-1/2 px-3 py-1 text-base cursor-pointer transition"

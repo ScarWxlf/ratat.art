@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    scrollbar-width: thin; /* Для Firefox */
+    scrollbar-color: #fdfdfd #f1f1f1; /* Для Firefox */
+  }
+  
+  /* Стилі для WebKit (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  /*доріжка*/
+  ::-webkit-scrollbar-track {
+    background: #ffffff; 
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 10px;
+    border: 3px solid #d6d6d6; 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #e0e0e0;
+  }
+  

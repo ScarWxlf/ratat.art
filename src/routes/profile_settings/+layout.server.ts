@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
+import type { LayoutServerLoad } from './$types';
 
-/** @type {import('./$types').LayoutServerLoad} */
-export function load({ cookies }) {
+export const load: LayoutServerLoad = ({ cookies }) =>{
 	if (!cookies.get('auth')) {
 		throw redirect(302, '/');
 	}
