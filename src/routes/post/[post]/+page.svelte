@@ -153,7 +153,7 @@
 						>
 							{#if showModal}
 								<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-								<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+								<div class="fixed flex justify-center inset-0 z-10 w-screen overflow-y-auto">
 									<div
 										class="flex items-end justify-center p-4 text-center sm:items-center sm:p-0"
 									>
