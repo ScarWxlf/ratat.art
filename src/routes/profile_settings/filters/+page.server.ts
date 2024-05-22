@@ -27,6 +27,6 @@ export const actions: Actions = {
 			tag,
 			userId
 		]);
-		return { success: true, tags: res.rows[0].tags};
+		return { successDelete: true, tags: res.rows[0].tags};
 	}
 };

@@ -67,14 +67,14 @@
 				{#if form?.missing?.password}<p class="text-red-400">The password field is required</p>{/if}
 			</div>
 
-			{#if form?.message}<p class="text-red-400">{form.message}</p>{/if}
-
+			
 			<div class="flex flex-row-reverse w-full">
 				<button
-					class="border w-full border-gray-500 rounded-lg py-1 px-1 pb-1 duration-300 hover:bg-gray-200 hover:outline-2"
-					type="submit">Sign in</button
+				class="border w-full border-gray-500 rounded-lg py-1 px-1 pb-1 duration-300 hover:bg-gray-200 hover:outline-2"
+				type="submit">Sign in</button
 				>
 			</div>
 		</form>
+		{#if form?.message}<p class="text-red-400 mt-1">{form.message}</p>{/if}
 	</div>
 </div>

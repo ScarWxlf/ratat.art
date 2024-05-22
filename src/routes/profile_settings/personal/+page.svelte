@@ -43,7 +43,7 @@
 			{#if form?.messagePassword}
 				<p class="text-red-400">{form.messagePassword}</p>
 			{/if}
-			{#if form?.succesPassword}
+			{#if form?.successChangePass}
 				<p class="text-green-500">Password changed success</p>
 			{/if}
             <button class="mt-2 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>

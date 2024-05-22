@@ -32,12 +32,7 @@
 	onMount(() => {
 		// @ts-expect-error beb
 		maxHeigh = document.getElementById('image').offsetHeight;
-		let commentsHeight = document.getElementById('comments') as HTMLElement;
-		let height = commentsHeight.offsetHeight;
-		if(height > maxHeigh)
-		{
-			commentsHeight.style.height = `${maxHeigh}px`;
-		}
+		console.log(maxHeigh)
 
 		document.addEventListener('click', handleClickOutside);
 		return () => {
@@ -226,7 +221,7 @@
 					</div>
 					<LikeButton {isLiked} postId={postDB.id} />
 				</div>
-				<div class="overflow-y-auto flex-grow min-h-[330px]" id='comments'>
+				<div class="overflow-y-auto flex-grow min-h-[330px]" id='comments' style="height: {maxHeigh-200}px;">
 					<div class="px-7">
 						<h1 class="text-3xl">{postDB.title}</h1>
 						<ul class="flex gap-2 mt-2">

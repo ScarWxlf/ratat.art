@@ -46,7 +46,7 @@
 				if (!canRequestMore) return;
 				e.wait();
 				setTimeout(async () => {
-					loading =false;
+					loading = false;
 					const newImages = await getPosts();
 					if(newImages.length === 0) canRequestMore = false;
 					images = [...images, ...newImages];

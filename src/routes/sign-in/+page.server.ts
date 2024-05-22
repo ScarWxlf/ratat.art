@@ -48,8 +48,15 @@ export const actions: Actions = {
 				user = result.rows[0];
 				const storedHashedPassword = user.password;
 				[err, valid] = await compareAsync(password, storedHashedPassword);
-			} else {
+				if(!valid)
+					return fail(401, {
+						email,
+						message: 'Invalid email or password',
+						error: err,
+					});
+			}else{
 				return fail(401, {
+					email,
 					message: 'Invalid email or password',
 					error: err,
 				});

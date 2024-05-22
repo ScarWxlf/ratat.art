@@ -50,7 +50,6 @@ export const actions: Actions = {
 							'UPDATE users SET password = $1 WHERE id = $2',
 							[hash, userId]
 						);
-			         return {succesPassword: true}
 					} catch (error) {
 						console.log(error);
 					}
@@ -61,6 +60,7 @@ export const actions: Actions = {
 				messagePassword: 'Invalid password'
 			});
 		}
+		return {successChangePass: true}
 	},
 	personal_profile_email: async ({ request, locals }) => {
 		const data = await request.formData();

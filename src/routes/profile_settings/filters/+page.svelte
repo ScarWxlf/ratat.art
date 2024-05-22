@@ -49,6 +49,9 @@
 			{#if form?.success}
 				<p class="text-green-500">Tag added success</p>
 			{/if}
+			{#if form?.successDelete}
+				<p class="text-red-500">Tag delete success</p>
+			{/if}
 			<button class="mt-4 py-1 px-4 rounded-full bg-gray-300 w-1/2 dark:text-black" type="submit">Submit</button>
 		</form>
 </div>
